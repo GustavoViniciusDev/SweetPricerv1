@@ -1,0 +1,25 @@
+.slider-wrapper {
+    overflow: hidden;
+    position: relative;
+}
+
+.slider-inner {
+    display: flex;
+    width: 200%; /* Ajuste conforme o número de imagens duplicadas */
+    animation: slide 20s linear infinite; /* Ajuste a duração conforme necessário */
+}
+
+.slider-item {
+    flex: 0 0 auto;
+    width: 16.66%; /* 100% dividido pelo número de imagens visíveis (6 imagens duplicadas) */
+    padding: 0 10px;
+}
+
+@keyframes slide {
+    from {
+        transform: translateX(0);
+    }
+    to {
+        transform: translateX(-100%);
+    }
+}
