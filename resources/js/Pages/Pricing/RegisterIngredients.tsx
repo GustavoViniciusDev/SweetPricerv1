@@ -1,6 +1,6 @@
+import React, { useState, useEffect } from "react";
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
 import { PageProps } from '@/types';
-import { useState } from "react";
 import { Card, CardHeader, CardTitle, CardContent, CardFooter } from "@/Components/ui/card";
 import { Label } from "@/Components/ui/label";
 import { Input } from "@/Components/ui/input";
@@ -10,41 +10,45 @@ import { Head, useForm } from '@inertiajs/react';
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
+interface Ingredient {
+    name: string;
+    quantity: string;
+    cost: string;
+}
 
 interface Pricing {
     id: number;
     name_pricing: string;
     user_id: string;
+    ingredients: Ingredient[];
 }
 
 interface EditPricingProps extends PageProps {
     pricing: Pricing;
 }
 
-type Ingredient = {
-    name: string;
-    quantity: string;
-    cost: string;
-};
-
 export default function RegisterIngredients({ auth, pricing }: EditPricingProps) {
     const { setData, post } = useForm({
         pricing_id: pricing.id,
-        ingredients: [
-            { name: "", quantity: "", cost: "" }
-        ],
+        ingredients: pricing.ingredients || [{ name: "", quantity: "", cost: "" }],
     });
 
-    const [ingredients, setIngredients] = useState<Ingredient[]>([
-        { name: "", quantity: "", cost: "" }
-    ]);
+    const [ingredients, setIngredients] = useState<Ingredient[]>(
+        pricing.ingredients || [{ name: "", quantity: "", cost: "" }]
+    );
+
+    useEffect(() => {
+        if (pricing.ingredients && JSON.stringify(pricing.ingredients) !== JSON.stringify(ingredients)) {
+            setIngredients(pricing.ingredients);
+            setData("ingredients", pricing.ingredients);
+        }
+    }, [pricing.ingredients]);
 
     const handleChange = (index: number, field: keyof Ingredient, value: string) => {
         const newIngredients = [...ingredients];
 
         if (field === "cost") {
             value = value.replace(/[^0-9.]/g, '');
-
             newIngredients[index][field] = value ? `R$ ${value}` : '';
         } else {
             newIngredients[index][field] = value;
@@ -74,9 +78,9 @@ export default function RegisterIngredients({ auth, pricing }: EditPricingProps)
         e.preventDefault();
 
         const hasValidIngredients = ingredients.some(ingredient =>
-            ingredient.name.trim() !== "" ||
-            ingredient.quantity.trim() !== "" ||
-            ingredient.cost.trim() !== ""
+            String(ingredient.name).trim() !== "" ||
+            String(ingredient.quantity).trim() !== "" ||
+            String(ingredient.cost).trim() !== ""
         );
 
         if (!hasValidIngredients) {
@@ -85,9 +89,9 @@ export default function RegisterIngredients({ auth, pricing }: EditPricingProps)
         }
 
         const validIngredients = ingredients.every(ingredient =>
-            ingredient.name.trim() !== "" &&
-            ingredient.quantity.trim() !== "" &&
-            ingredient.cost.trim() !== ""
+            String(ingredient.name).trim() !== "" &&
+            String(ingredient.quantity).trim() !== "" &&
+            String(ingredient.cost).trim() !== ""
         );
 
         if (!validIngredients) {
@@ -98,6 +102,7 @@ export default function RegisterIngredients({ auth, pricing }: EditPricingProps)
         post(route('ingredients.store'));
     };
 
+
     return (
         <>
             <AuthenticatedLayout
@@ -106,7 +111,7 @@ export default function RegisterIngredients({ auth, pricing }: EditPricingProps)
             ></AuthenticatedLayout>
             <Head title="Precificação" />
             <Card>
-            <form onSubmit={handleSubmit} className="flex flex-col items-center">
+                <form onSubmit={handleSubmit} className="flex flex-col items-center">
                     <CardHeader>
                         <CardTitle className="text-custom-700 dark:text-dark-custom-700">Custo dos Ingredientes $</CardTitle>
                     </CardHeader>
@@ -165,9 +170,8 @@ export default function RegisterIngredients({ auth, pricing }: EditPricingProps)
                     </div>
                 </form>
             </Card>
-
         </>
-    )
+    );
 }
 
 function PlusIcon(props: JSX.IntrinsicAttributes & SVGProps<SVGSVGElement>) {

@@ -13,8 +13,16 @@ class DashboardController
         $userId = Auth::id();
         $list_pricings = PricingPerUser::where('user_id', $userId)
                 ->orderByDesc('created_at')
-                ->with('ingredients')
-                ->get();
+                ->with('pricingDetails')
+                ->get()
+                ->map(function($pricing) {
+                    return [
+                        'id' => $pricing->id,
+                        'name_pricing' => $pricing->name_pricing,
+                        'user_id' => $pricing->user_id,
+                        'id_pricing_details' => $pricing->pricingDetails ? $pricing->pricingDetails->id : null,
+                    ];
+                });
 
         return Inertia::render('Dashboard', [
             'list_pricings' => $list_pricings,

@@ -58,6 +58,8 @@ Route::middleware('auth')->group(function () {
 
     Route::post('/pricing-details', [PricingDetailController::class, 'store'])->name('pricing_details.store');
 
+    Route::get('/pricing-details/{id}', [PricingDetailController::class, 'index'])->name('pricing_details.finalized');
+
 });
 
 require __DIR__.'/auth.php';

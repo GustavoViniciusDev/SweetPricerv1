@@ -1,6 +1,6 @@
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
-import React, { FormEventHandler, useState } from "react";
-import { Head,useForm,usePage } from "@inertiajs/react";
+import React, { FormEventHandler, useEffect, useState } from "react";
+import { Head, useForm, usePage } from "@inertiajs/react";
 import { Button } from "@/Components/ui/button";
 
 interface Ingredient {
@@ -19,7 +19,19 @@ interface PageProps extends CustomPageProps {
     [key: string]: any;
 }
 
-export default function CalculatePricing( {auth}: PageProps ) {
+interface FormData {
+    total_ingredients_cost: string;
+    additional_costs: string;
+    profit_and_labor_cost: string;
+    units_yield: string;
+    price_per_unit: string;
+    packaging_cost: string;
+    final_price_per_unit: string;
+    pricing_id: string;
+    user_id: string;
+}
+
+export default function CalculatePricing({ auth }: PageProps) {
     const { props } = usePage<PageProps>();
     const { pricing_id, user_id, ingredients } = props;
 
@@ -53,44 +65,44 @@ export default function CalculatePricing( {auth}: PageProps ) {
 
     const finalPricePerUnit = pricePerUnit + packagingCost;
 
-    const { data, setData, post } = useForm({
-        total_ingredients_cost: "",
-        additional_cost: "",
-        profit_and_labor_cost: "",
-        units_yield: "",
-        price_per_unit: "",
-        packaging_cost: "",
-        final_price_per_unit: "",
+    const { data, setData, post, processing, errors } = useForm<FormData>({
+        total_ingredients_cost: '',
+        additional_costs: '',
+        profit_and_labor_cost: '',
+        units_yield: '',
+        price_per_unit: '',
+        packaging_cost: '',
+        final_price_per_unit: '',
+        pricing_id: '',
+        user_id: ''
     });
 
-    const submit: FormEventHandler = (e) => {
-        e.preventDefault();
-
-        setData({
+    useEffect(() => {
+        setData((prev) => ({
+            ...prev,
             total_ingredients_cost: totalIngredientsCost.toFixed(2),
-            additional_cost: additionalCosts.toFixed(2),
+            additional_costs: additionalCosts.toFixed(2),
             profit_and_labor_cost: profitAndLaborCost.toFixed(2),
             units_yield: unitsYield.toString(),
             price_per_unit: pricePerUnit.toFixed(2),
             packaging_cost: packagingCost.toFixed(2),
             final_price_per_unit: finalPricePerUnit.toFixed(2),
-        });
+            pricing_id: pricing_id.toString(),
+            user_id: user_id.toString()
+        }));
+    }, [totalIngredientsCost, additionalCosts, profitAndLaborCost, unitsYield, pricePerUnit, packagingCost, finalPricePerUnit, pricing_id, user_id]);
 
-        post(route("pricing_details.store"), {
-            data: {
-                ...data,
-                pricing_id,
-                user_id
-            }
-        });
+    const submit: FormEventHandler = (e) => {
+        e.preventDefault();
+        post(route("pricing_details.store"));
     };
 
     return (
         <>
-        <AuthenticatedLayout
+            <AuthenticatedLayout
                 user={auth.user}
                 header={<h2 className="font-semibold text-xl text-gray-800 leading-tight">Precificação</h2>}
-            ></AuthenticatedLayout>
+            />
             <Head title="Precificação" />
             <div className="grid gap-8 max-w-4xl mx-auto px-4 md:px-0">
                 <form onSubmit={submit} className="space-y-4">
@@ -119,7 +131,7 @@ export default function CalculatePricing( {auth}: PageProps ) {
                                                 <input
                                                     type="number"
                                                     value={usedGrams[index] || ""}
-                                                    onInput={(e) => handleGramsUsedChange(index, (e.target as HTMLInputElement).value)}
+                                                    onChange={(e) => handleGramsUsedChange(index, e.target.value)}
                                                     className="border rounded px-2"
                                                 />
                                             </td>
@@ -148,9 +160,8 @@ export default function CalculatePricing( {auth}: PageProps ) {
                                         <td className="p-4 text-right">
                                             <input
                                                 type="hidden"
-                                                value={data.total_ingredients_cost}
+                                                value={totalIngredientsCost.toFixed(2)}
                                                 name="total_ingredients_cost"
-                                                onChange={(e) => setData("total_ingredients_cost", e.target.value)}
                                             />
                                             R$ {totalIngredientsCost.toFixed(2)}
                                         </td>
@@ -160,9 +171,8 @@ export default function CalculatePricing( {auth}: PageProps ) {
                                         <td className="p-4 text-right">
                                             <input
                                                 type="hidden"
-                                                value={data.additional_cost}
-                                                name="additional_cost"
-                                                onChange={(e) =>setData("additional_cost", e.target.value)}
+                                                value={additionalCosts.toFixed(2)}
+                                                name="additional_costs"
                                             />
                                             R$ {additionalCosts.toFixed(2)}
                                         </td>
@@ -170,10 +180,10 @@ export default function CalculatePricing( {auth}: PageProps ) {
                                     <tr className="border-b">
                                         <td className="p-4">Multiplica por 3 (seu lucro e mão de obra)</td>
                                         <td className="p-4 text-right">
-                                            <input type="hidden"
-                                                value={data.profit_and_labor_cost}
+                                            <input
+                                                type="hidden"
+                                                value={profitAndLaborCost.toFixed(2)}
                                                 name="profit_and_labor_cost"
-                                                onChange={(e) => setData("profit_and_labor_cost", e.target.value)}
                                             />
                                             R$ {profitAndLaborCost.toFixed(2)}
                                         </td>
@@ -181,15 +191,19 @@ export default function CalculatePricing( {auth}: PageProps ) {
                                     <tr className="border-b">
                                         <td className="p-4">Rendimento / quantas unidades</td>
                                         <td className="p-4 text-right">
-                                            <input type="hidden"
-                                                value={data.units_yield}
+                                            <input
+                                                type="hidden"
+                                                value={unitsYield.toString()}
                                                 name="units_yield"
-                                                onChange={(e) => setData("units_yield", e.target.value)}
                                             />
                                             <input
                                                 type="number"
                                                 value={unitsYield}
-                                                onChange={(e) => setUnitsYield(Number(e.target.value))}
+                                                onChange={(e) => {
+                                                    const value = Number(e.target.value);
+                                                    setUnitsYield(value);
+                                                    setData("units_yield", value.toString());
+                                                }}
                                                 className="border rounded px-2"
                                             />
                                         </td>
@@ -197,33 +211,42 @@ export default function CalculatePricing( {auth}: PageProps ) {
                                     <tr className="border-b">
                                         <td className="p-4">Preço Unitário</td>
                                         <td className="p-4 text-right">
-                                            <input type="hidden"
-                                                value={data.price_per_unit}
-                                                onChange={(e) => setData("price_per_unit", e.target.value)}
+                                            <input
+                                                type="hidden"
+                                                value={pricePerUnit.toFixed(2)}
+                                                name="price_per_unit"
                                             />
                                             R$ {pricePerUnit.toFixed(2)}
                                         </td>
                                     </tr>
                                     <tr className="border-b">
-                                        <td className="p-4">Preço por Embalagem Individual</td>
+                                        <td className="p-4">Embalagem (saquinhos, caixas, fitas, etc)</td>
                                         <td className="p-4 text-right">
                                             <input
                                                 type="hidden"
-                                                value={data.packaging_cost}
-                                                onChange={(e) => setData("packaging_cost", e.target.value)}
+                                                value={packagingCost.toFixed(2)}
+                                                name="packaging_cost"
                                             />
                                             <input
                                                 type="number"
                                                 value={packagingCost}
-                                                onChange={(e) => setPackagingCost(Number(e.target.value))}
+                                                onChange={(e) => {
+                                                    const value = Number(e.target.value);
+                                                    setPackagingCost(value);
+                                                    setData("packaging_cost", value.toFixed(2));
+                                                }}
                                                 className="border rounded px-2"
                                             />
                                         </td>
                                     </tr>
                                     <tr className="border-b">
-                                        <td className="p-4">Preço Final</td>
+                                        <td className="p-4">Preço Final Unitário</td>
                                         <td className="p-4 text-right">
-                                            <input type="hidden" />
+                                            <input
+                                                type="hidden"
+                                                value={finalPricePerUnit.toFixed(2)}
+                                                name="final_price_per_unit"
+                                            />
                                             R$ {finalPricePerUnit.toFixed(2)}
                                         </td>
                                     </tr>
@@ -231,12 +254,9 @@ export default function CalculatePricing( {auth}: PageProps ) {
                             </table>
                         </div>
                     </div>
-                    <Button type="submit" className="w-full bg-custom-400 dark:bg-dark-custom-500 hover:bg-custom-600 dark:hover:bg-dark-custom-600 text-white font-bold py-2 px-4 border border-custom-500 dark:border-dark-custom-500 rounded-xl">
-                            Criar Precificação
-                    </Button>
+                    <Button type="submit" disabled={processing}>Salvar</Button>
                 </form>
             </div>
         </>
-
     );
 }

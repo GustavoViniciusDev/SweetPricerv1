@@ -13,11 +13,17 @@ class PricingPerUser extends Model
     protected $fillable = [
         'name_pricing',
         'user_id',
+        'id_pricing_details',
     ];
 
     public function ingredients()
     {
         return $this->hasMany(Ingredient::class, 'pricing_id');
+    }
+
+    public function pricingDetails()
+    {
+        return $this->belongsTo(PricingDetail::class, 'id_pricing_details');
     }
 }
 

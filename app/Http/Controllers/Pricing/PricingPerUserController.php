@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Pricing;
 
 use App\Models\PricingPerUser;
 use App\Models\Ingredient;
+use App\Models\PricingDetail;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Routing\Controller;
@@ -22,6 +23,12 @@ class PricingPerUserController extends Controller
             'user_id' => Auth::id(),
         ]);
 
+        $pricingDetail = PricingDetail::where('pricing_id', $pricingPerUser->id)->first();
+
+        if ($pricingDetail) {
+            $pricingPerUser->update(['id_pricing_details' => $pricingDetail->id]);
+        }
+
         $encodedName = urlencode($pricingPerUser->name_pricing);
 
         return redirect()->route('register_ingredients.show', [
@@ -35,12 +42,10 @@ class PricingPerUserController extends Controller
 
     public function edit($id)
     {
-         $pricing = PricingPerUser::with('ingredients')->findOrFail($id);
-        return inertia('Pricing/RegisterIngredients', ['pricing' => $pricing, 'ingredients' => $pricing->ingredients]);
-    }
-
-    public function ingredients()
-    {
-        return $this->hasMany(Ingredient::class, 'pricing_id');
+        $pricing = PricingPerUser::with('ingredients')->findOrFail($id);
+        return Inertia::render('Pricing/RegisterIngredients', [
+            'pricing' => $pricing,
+            'ingredients' => $pricing->ingredients
+        ]);
     }
 }
