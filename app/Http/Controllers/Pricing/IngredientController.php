@@ -2,9 +2,8 @@
 
 namespace App\Http\Controllers\Pricing;
 
-use App\Models\PricingPerUser;
+use App\Models\Ingredient;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Routing\Controller;
 
 class IngredientController extends Controller
@@ -19,22 +18,15 @@ class IngredientController extends Controller
             'ingredients.*.cost' => 'required|numeric',
         ]);
 
-        $pricingPerUser = PricingPerUser::findOrFail($request->input('pricing_id'));
-
-        $ingredients = $request->input('ingredients');
-
-        foreach ($ingredients as $ingredientData) {
-            $pricingPerUser->ingredients()->create([
-                'name' => $ingredientData['name'],
-                'quantity' => $ingredientData['quantity'],
-                'cost' => $ingredientData['cost'],
-                'user_id' => Auth::id(),
+        foreach ($request->ingredients as $ingredient) {
+            Ingredient::create([
+                'name' => $ingredient['name'],
+                'quantity' => $ingredient['quantity'],
+                'cost' => $ingredient['cost'],
+                'pricing_id' => $request->pricing_id,
             ]);
         }
 
-        return redirect()->route('calculate_pricing.show', [
-            'pricing_id' => $pricingPerUser->id,
-            'user_id' => Auth::id(),
-        ])->with('success', 'Ingredientes salvos com sucesso!');
+        return response()->json(['message' => 'Ingredientes salvos com sucesso']);
     }
 }

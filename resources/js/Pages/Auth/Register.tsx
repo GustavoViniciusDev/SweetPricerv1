@@ -37,31 +37,11 @@ export default function Register() {
     return (
         <GuestLayout>
             <Head title="Criar Conta" />
-            <div className="mb-10">
-                <header className={`fixed top-0 left-0 w-full px-4 lg:px-6 h-14 flex items-center ${scrolled ? 'shadow-md' : ''} z-50 transition-shadow duration-300`}>
-                    <Link href="/" className="flex items-center justify-center">
-                        <h2 className='text-2xl text-custom-700 dark:text-dark-custom-200'>SweetPricer</h2>
-                    </Link>
-                    <nav className="ml-auto flex gap-4 sm:gap-6">
-                        <Link
-                            href="/"
-                            className="bg-transparent text-custom-700 dark:text-dark-custom-200 font-semibold py-2 px-4 border border-custom-400 dark:border-dark-custom-400 hover:border-custom-700 dark:hover:border-dark-custom-700 rounded"
-                        >
-                            Voltar
-                        </Link>
-                        <Link
-                            href={route('register')}
-                            className="bg-custom-400 dark:bg-dark-custom-400 hover:bg-custom-500 dark:hover:bg-dark-custom-500 text-white font-bold py-2 px-4 border border-custom-500 dark:border-dark-custom-500 rounded"
-                        >
-                            Entrar
-                        </Link>
-                    </nav>
-                </header>
-            </div>
-
 
             <form onSubmit={submit} className="space-y-4">
                 <div>
+                    <h2 className="text-center text-custom-700 dark:text-dark-custom-200 text-2xl font-bold mb-4">Crie sua conta</h2>
+
                     <InputLabel htmlFor="name" value="Nome de Usuário" />
 
                     <TextInput

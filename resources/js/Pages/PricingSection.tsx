@@ -32,40 +32,44 @@ const PricingSection = () => {
     ];
 
     return (
-        <div className="mx-auto grid max-w-5xl grid-cols-1 gap-6 py-12 sm:grid-cols-2 md:grid-cols-3 lg:gap-12">
+        <div className="mx-auto grid max-w-5xl grid-cols-1 gap-8 py-16 sm:grid-cols-2 md:grid-cols-3 lg:gap-12">
             {plans.map((plan, index) => (
                 <Card
                     key={index}
-                    className={`relative transition-transform duration-300 ${focusedIndex === index || clickedIndex === index ? 'transform scale-105' : ''} ${clickedIndex === null ? '' : 'filter blur-sm'}`}
+                    className={`relative transition-transform duration-300 ease-in-out transform hover:scale-105 ${clickedIndex === index ? 'scale-105 shadow-xl' : 'shadow-md'} ${clickedIndex === null ? '' : 'filter blur-sm'}`}
                     onMouseEnter={() => setFocusedIndex(index)}
                     onMouseLeave={() => setFocusedIndex(null)}
                     onClick={() => setClickedIndex(index)}
                 >
                     {clickedIndex === index && (
                         <div
-                            className="absolute inset-0 bg-black/30 z-10"
+                            className="absolute inset-0 bg-black/40 z-10 rounded-lg"
                             onClick={(e) => e.stopPropagation()}
                         />
                     )}
                     {!plan.available && (
-                        <div className="absolute top-2 right-2 bg-red-500 dark:bg-red-600 text-white text-xs font-bold px-2 py-1 rounded">
-                            Indisponível no Momento
+                        <div className="absolute top-2 right-2 bg-red-600 text-white text-xs font-bold px-3 py-1 rounded-md shadow">
+                            Indisponível
                         </div>
                     )}
-                    <CardHeader>
-                        <CardTitle className="text-custom-700 dark:text-dark-custom-200">{plan.title}</CardTitle>
-                        <CardDescription className="text-custom-600 dark:text-dark-custom-300">{plan.description}</CardDescription>
+                    <CardHeader className="text-center py-4">
+                        <CardTitle className="text-lg font-semibold text-custom-800 dark:text-dark-custom-100">
+                            {plan.title}
+                        </CardTitle>
+                        <CardDescription className="text-sm text-custom-500 dark:text-dark-custom-400">
+                            {plan.description}
+                        </CardDescription>
                     </CardHeader>
                     <CardContent>
-                        <div className="space-y-4">
-                            <div className="text-4xl font-bold text-custom-700 dark:text-dark-custom-200">
+                        <div className="space-y-6 text-center">
+                            <div className="text-4xl font-extrabold text-custom-900 dark:text-dark-custom-100">
                                 {plan.price}
                             </div>
                             <ul className="space-y-2">
                                 {plan.features.map((feature, i) => (
-                                    <li key={i} className="flex items-center gap-2 text-custom-600 dark:text-dark-custom-300">
-                                        <CheckIcon className="h-4 w-4" />
-                                        {feature}
+                                    <li key={i} className="flex items-center justify-center gap-2 text-custom-600 dark:text-dark-custom-300">
+                                        <CheckIcon className="h-5 w-5 text-green-500 dark:text-green-400" />
+                                        <span className="text-base">{feature}</span>
                                     </li>
                                 ))}
                             </ul>

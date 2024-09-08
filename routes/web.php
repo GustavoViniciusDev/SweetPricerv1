@@ -38,7 +38,7 @@ Route::get('/', function () {
     ]);
 });
 
-Route::middleware('auth')->group(function () {
+Route::middleware('auth', 'verified')->group(function () {
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
 
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
@@ -49,16 +49,12 @@ Route::middleware('auth')->group(function () {
     Route::get('/register_ingredients/{id}/{name_pricing}', [RegisterPricingController::class, 'show'])
         ->name('register_ingredients.show');
     Route::get('/edit-pricing/{id}', [PricingPerUserController::class, 'edit'])->name('pricing.edit');
-
     Route::get('/pricing_list', [PricingPerUserController::class, 'showpricings'])->name('pricing.showpricings');
 
-    Route::post('/ingredients', [IngredientController::class, 'store'])->name('ingredients.store');
-
-    Route::get('/calculate-pricing/{pricing_id}', [PricingController::class, 'show'])->name('calculate_pricing.show');
-
-    Route::post('/pricing-details', [PricingDetailController::class, 'store'])->name('pricing_details.store');
-
-    Route::get('/pricing-details/{id}', [PricingDetailController::class, 'index'])->name('pricing_details.finalized');
+    Route::get('/calculate-pricing/{pricing_id}', [PricingController::class, 'showPricing'])->name('calculate_pricing.show');
+    Route::post('/pricing-details', [PricingController::class, 'storePricingDetails'])->name('pricing_details.store');
+    Route::get('/pricing-details/{id}', [PricingController::class, 'showPricingDetails'])->name('pricing_details.finalized');
+    Route::delete('/pricing/{id}', [PricingController::class, 'destroy'])->name('pricing.destroy');
 
 });
 

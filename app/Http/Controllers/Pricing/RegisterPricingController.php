@@ -14,7 +14,9 @@ class RegisterPricingController
 
         return Inertia::render('Pricing/RegisterIngredients', [
             'pricing' => $pricing,
-            'name_pricing' => $name_pricing
+            'name_pricing' => $name_pricing,
+            'pricing_id' => $id,
+            'user_id' => $pricing->user_id,
         ]);
     }
 }

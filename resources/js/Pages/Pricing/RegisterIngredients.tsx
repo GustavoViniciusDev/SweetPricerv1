@@ -1,216 +1,307 @@
-import React, { useState, useEffect } from "react";
+import React, { useEffect, useState, FormEventHandler } from "react";
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
-import { PageProps } from '@/types';
+import { Head, useForm, usePage } from "@inertiajs/react";
 import { Card, CardHeader, CardTitle, CardContent, CardFooter } from "@/Components/ui/card";
-import { Label } from "@/Components/ui/label";
-import { Input } from "@/Components/ui/input";
 import { Button } from "@/Components/ui/button";
-import { JSX, SVGProps } from "react";
-import { Head, useForm } from '@inertiajs/react';
+import { Input } from "@/Components/ui/input";
+import { Label } from "@/Components/ui/label";
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-
-interface Ingredient {
-    name: string;
-    quantity: string;
-    cost: string;
-}
+import { TrashIcon, PlusCircleIcon } from '@heroicons/react/24/outline';
 
 interface Pricing {
     id: number;
     name_pricing: string;
     user_id: string;
+    id_pricing_details?: number;
+}
+
+interface Ingredient {
+    name: string;
+    quantity: number | string;
+    quantity_used: number | string;
+    cost: number | string;
+}
+
+
+interface CustomPageProps {
+    pricing_id: number;
+    user_id: number;
+    ingredients: Ingredient[];
+    list_pricings: Pricing[];
+    pricing_name: string;
+}
+
+interface PageProps extends CustomPageProps {
+    [key: string]: any;
+}
+
+interface FormData {
+    total_ingredients_cost: string;
+    additional_costs: string;
+    profit_and_labor_cost: string;
+    units_yield: string;
+    price_per_unit: string;
+    packaging_cost: string;
+    packaging_quantity: string;
+    final_price_per_unit: string;
+    pricing_id: string;
+    user_id: string;
     ingredients: Ingredient[];
 }
 
-interface EditPricingProps extends PageProps {
-    pricing: Pricing;
-}
+export default function CalculateAndRegisterPricing({ auth, pricing }: PageProps) {
+    const { props } = usePage<PageProps>();
+    const { pricing_id, user_id, ingredients, pricing_name } = props;
 
-export default function RegisterIngredients({ auth, pricing }: EditPricingProps) {
-    const { setData, post } = useForm({
-        pricing_id: pricing.id,
-        ingredients: pricing.ingredients || [{ name: "", quantity: "", cost: "" }],
+    const [usedGrams, setUsedGrams] = useState<{ [key: number]: number }>({});
+    const [profitMarginMultiplier, setProfitMarginMultiplier] = useState<number>(3);
+    const [unitsYield, setUnitsYield] = useState<number>(10);
+    const [packagingCost, setPackagingCost] = useState<number>(0);
+    const [packagingQuantity, setPackagingQuantity] = useState<number>(1);
+    const [ingredientList, setIngredientList] = useState<Ingredient[]>(ingredients || [{ name: "", quantity: "", quantity_used: "", cost: "" }]);
+
+    const calculateCostBasedOnUsedGrams = (ingredient: Ingredient, gramsUsed: number) => {
+        const cost = typeof ingredient.cost === "number" ? ingredient.cost : parseFloat(ingredient.cost.replace('R$ ', ''));
+        const gramsPerPackage = Number(ingredient.quantity);
+        return ((cost / gramsPerPackage) * gramsUsed).toFixed(2);
+    };
+
+    const handleGramsUsedChange = (index: number, value: string) => {
+        const grams = parseFloat(value) || 0;
+        setUsedGrams((prev) => ({ ...prev, [index]: grams }));
+    };
+
+    const totalIngredientsCost = ingredientList.reduce((sum, ingredient, index) => {
+        const gramsUsed = usedGrams[index] || 0;
+        const cost = parseFloat(calculateCostBasedOnUsedGrams(ingredient, gramsUsed));
+        return sum + cost;
+    }, 0);
+
+
+    const additionalCosts = totalIngredientsCost * 0.25;
+    const profitAndLaborCost = (totalIngredientsCost + additionalCosts) * profitMarginMultiplier;
+    const pricePerUnit = unitsYield ? profitAndLaborCost / unitsYield : 0;
+    const totalPackagingCost = packagingCost * packagingQuantity;
+    const finalPricePerUnit = pricePerUnit + totalPackagingCost;
+
+    const { data, setData, post, processing, errors } = useForm<FormData>({
+        total_ingredients_cost: '',
+        additional_costs: '',
+        profit_and_labor_cost: '',
+        units_yield: '',
+        price_per_unit: '',
+        packaging_cost: '',
+        packaging_quantity: '',
+        final_price_per_unit: '',
+        pricing_id: '',
+        user_id: '',
+        ingredients: []
     });
 
-    const [ingredients, setIngredients] = useState<Ingredient[]>(
-        pricing.ingredients || [{ name: "", quantity: "", cost: "" }]
-    );
-
     useEffect(() => {
-        if (pricing.ingredients && JSON.stringify(pricing.ingredients) !== JSON.stringify(ingredients)) {
-            setIngredients(pricing.ingredients);
-            setData("ingredients", pricing.ingredients);
-        }
-    }, [pricing.ingredients]);
+        setData(prev => ({
+            ...prev,
+            total_ingredients_cost: totalIngredientsCost.toFixed(2),
+            additional_costs: additionalCosts.toFixed(2),
+            profit_and_labor_cost: profitAndLaborCost.toFixed(2),
+            units_yield: unitsYield.toString(),
+            price_per_unit: pricePerUnit.toFixed(2),
+            packaging_cost: packagingCost.toFixed(2),
+            packaging_quantity: packagingQuantity.toString(),
+            final_price_per_unit: finalPricePerUnit.toFixed(2),
+            pricing_id: pricing_id ? pricing_id.toString() : '',
+            user_id: user_id ? user_id.toString() : '',
+            ingredients: ingredientList.map((ingredient, index) => ({
+                ...ingredient,
+                quantity: ingredient.quantity,
+                cost: typeof ingredient.cost === 'string' ? ingredient.cost.replace(/[^0-9.]/g, '') : '',
+                quantity_used: usedGrams[index] || 0
+            }))
+        }));
+    }, [totalIngredientsCost, additionalCosts, profitAndLaborCost, unitsYield, pricePerUnit, packagingCost, packagingQuantity, finalPricePerUnit, pricing_id, user_id, ingredientList, usedGrams]);
 
-    const handleChange = (index: number, field: keyof Ingredient, value: string) => {
-        const newIngredients = [...ingredients];
+
+    const handleChangeIngredient = (index: number, field: keyof Ingredient, value: string) => {
+        const newIngredients = [...ingredientList];
 
         if (field === "cost") {
-            value = value.replace(/[^0-9.]/g, '');
-            newIngredients[index][field] = value ? `R$ ${value}` : '';
+            const numericValue = value.replace(/[^0-9.]/g, '');
+            newIngredients[index][field] = numericValue ? `R$ ${numericValue}` : '';
         } else {
             newIngredients[index][field] = value;
         }
 
-        setIngredients(newIngredients);
-        setData("ingredients", newIngredients.map(ingredient => ({
-            ...ingredient,
-            cost: ingredient.cost.replace(/[^0-9.]/g, ''),
-        })));
+        setIngredientList(newIngredients);
+        setUsedGrams((prev) => ({ ...prev, [index]: 0 }));
     };
 
     const addIngredient = () => {
-        const newIngredients = [...ingredients, { name: "", quantity: "", cost: "" }];
-        setIngredients(newIngredients);
-        setData("ingredients", newIngredients);
+        const newIngredients = [...ingredientList, { name: "", quantity: "", quantity_used: "", cost: "" }];
+        setIngredientList(newIngredients);
     };
 
     const removeIngredient = (index: number) => {
-        const newIngredients = [...ingredients];
+        const newIngredients = [...ingredientList];
         newIngredients.splice(index, 1);
-        setIngredients(newIngredients);
-        setData("ingredients", newIngredients);
+        setIngredientList(newIngredients);
+        setUsedGrams((prev) => {
+            const newUsedGrams = { ...prev };
+            delete newUsedGrams[index];
+            return newUsedGrams;
+        });
     };
 
-    const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    const submit: FormEventHandler = (e) => {
         e.preventDefault();
-
-        const hasValidIngredients = ingredients.some(ingredient =>
-            String(ingredient.name).trim() !== "" ||
-            String(ingredient.quantity).trim() !== "" ||
-            String(ingredient.cost).trim() !== ""
-        );
-
-        if (!hasValidIngredients) {
-            toast.error("Por favor, adicione pelo menos um ingrediente.");
-            return;
-        }
-
-        const validIngredients = ingredients.every(ingredient =>
-            String(ingredient.name).trim() !== "" &&
-            String(ingredient.quantity).trim() !== "" &&
-            String(ingredient.cost).trim() !== ""
-        );
-
-        if (!validIngredients) {
-            toast.error("Por favor, preencha todos os campos dos ingredientes.");
-            return;
-        }
-
-        post(route('ingredients.store'));
+        post(route("pricing_details.store"), {
+            onSuccess: () => {
+                toast.success('Precificação salva com sucesso!');
+            },
+            onError: () => {
+                toast.error('Ocorreu um erro ao salvar a precificação.');
+            }
+        });
     };
-
 
     return (
         <>
             <AuthenticatedLayout
                 user={auth.user}
-                header={<h2 className="font-semibold text-xl text-gray-800 leading-tight">Precificação</h2>}
-            ></AuthenticatedLayout>
+                header={<h2 className="font-semibold text-xl text-custom-300 leading-tight">Precificação e Registro de Ingredientes</h2>}
+            />
             <Head title="Precificação" />
-            <Card>
-                <form onSubmit={handleSubmit} className="flex flex-col items-center">
-                    <CardHeader>
-                        <CardTitle className="text-custom-700 dark:text-dark-custom-700">Custo dos Ingredientes $</CardTitle>
-                    </CardHeader>
-                    <CardContent>
-                        <div className="grid gap-4">
-                            {ingredients.map((ingredient, index) => (
-                                <div key={index} className="grid grid-cols-[1fr_1fr_1fr_auto] items-center gap-4">
-                                    <div className="space-y-2">
-                                        <Label htmlFor={`name-${index}`} className="text-custom-600 dark:text-dark-custom-600">Ingrediente</Label>
+            <div className="max-w-4xl mx-auto px-4 md:px-0 mb-10">
+                <h1 className="text-4xl font-bold mb-8 text-custom-300">Precificação: {pricing.name_pricing}</h1>
+
+                <form onSubmit={submit} className="space-y-6">
+                    <div className="grid gap-6">
+                        <h2 className="text-3xl font-bold text-custom-300">Registro de Ingredientes</h2>
+                        {ingredientList.map((ingredient, index) => (
+                            <Card key={index} className="border border-custom-200 bg-custom-50">
+                                <CardHeader className="bg-custom-100">
+                                    <CardTitle className="text-custom-700">Ingrediente {index + 1}</CardTitle>
+                                </CardHeader>
+                                <CardContent className="space-y-4">
+                                    <div className="grid gap-4">
+                                        <Label className="text-custom-800">Nome</Label>
                                         <Input
-                                            id={`name-${index}`}
                                             value={ingredient.name}
-                                            onChange={(e) => handleChange(index, "name", e.target.value)}
-                                            className="border-custom-300 dark:border-dark-custom-300 focus:border-custom-500 dark:focus:border-dark-custom-500"
+                                            onChange={(e) => handleChangeIngredient(index, "name", e.target.value)}
+                                            className="bg-custom-50 border-custom-300"
                                         />
-                                    </div>
-                                    <div className="space-y-2">
-                                        <Label htmlFor={`quantity-${index}`} className="text-custom-600 dark:text-dark-custom-600">Quantidade</Label>
+                                        <Label className="text-custom-800">Quantidade em g/embalagem</Label>
                                         <Input
-                                            id={`quantity-${index}`}
+                                            type="number"
                                             value={ingredient.quantity}
-                                            onChange={(e) => {
-                                                const value = e.target.value.replace(/[^0-9]/g, '');
-                                                handleChange(index, "quantity", value);
-                                            }}
-                                            className="border-custom-300 dark:border-dark-custom-300 focus:border-custom-500 dark:focus:border-dark-custom-500"
+                                            onChange={(e) => handleChangeIngredient(index, "quantity", e.target.value)}
+                                            className="bg-custom-50 border-custom-300"
                                         />
-                                    </div>
-                                    <div className="space-y-1">
-                                        <Label htmlFor={`cost-${index}`} className="text-custom-600 dark:text-dark-custom-600">Custo</Label>
+                                        <Label className="text-custom-800">Custo</Label>
                                         <Input
-                                            id={`cost-${index}`}
-                                            value={ingredient.cost}
-                                            onChange={(e) => handleChange(index, "cost", e.target.value)}
-                                            className="border-custom-300 dark:border-dark-custom-300 focus:border-custom-500 dark:focus:border-dark-custom-500"
+                                            type="number"
+                                            value={typeof ingredient.cost === 'string' ? ingredient.cost.replace(/[^0-9.]/g, '') : ''}
+                                            onChange={(e) => handleChangeIngredient(index, "cost", e.target.value)}
+                                            className="bg-custom-50 border-custom-300"
+                                        />
+                                        <Label className="text-custom-800">Quantidade utilizada (g)</Label>
+                                        <Input
+                                            type="number"
+                                            value={usedGrams[index] || ''}
+                                            onChange={(e) => handleGramsUsedChange(index, e.target.value)}
+                                            className="bg-custom-50 border-custom-300"
                                         />
                                     </div>
-                                    <Button variant="ghost" size="icon" onClick={() => removeIngredient(index)} className="text-custom-500 hover:text-custom-700 dark:text-dark-custom-500 dark:hover:text-dark-custom-700">
+                                </CardContent>
+                                <CardFooter className="flex justify-between items-center">
+                                    <Button
+                                        type="button"
+                                        onClick={() => removeIngredient(index)}
+                                        className="bg-custom-400 hover:bg-custom-500 text-white"
+                                    >
                                         <TrashIcon className="h-5 w-5" />
-                                        <span className="sr-only">Remover ingrediente</span>
                                     </Button>
-                                </div>
-                            ))}
+                                    <Button
+                                        type="button"
+                                        onClick={addIngredient}
+                                        className="bg-custom-400 hover:bg-custom-500 text-white"
+                                    >
+                                        <PlusCircleIcon className="h-5 w-5" />
+                                    </Button>
+                                </CardFooter>
+                            </Card>
+                        ))}
+                    </div>
+
+                    <div className="space-y-6">
+                        <h2 className="text-3xl font-bold text-custom-300">Cálculo de Preço</h2>
+                        <div className="grid gap-4">
+                            <Label className="text-custom-800">Custo Total dos Ingredientes</Label>
+                            <Input
+                                type="text"
+                                value={`R$ ${totalIngredientsCost.toFixed(2)}`}
+                                readOnly
+                                className="bg-custom-50 border-custom-300"
+                            />
+                            <Label className="text-custom-800">Custos Adicionais</Label>
+                            <Input
+                                type="text"
+                                value={`R$ ${additionalCosts.toFixed(2)}`}
+                                readOnly
+                                className="bg-custom-50 border-custom-300"
+                            />
+                            <Label className="text-custom-800">Custo Total com Lucro e Mão de Obra</Label>
+                            <Input
+                                type="text"
+                                value={`R$ ${profitAndLaborCost.toFixed(2)}`}
+                                readOnly
+                                className="bg-custom-50 border-custom-300"
+                            />
+                            <Label className="text-custom-800">Unidades Rendidas</Label>
+                            <Input
+                                type="number"
+                                value={unitsYield}
+                                onChange={(e) => setUnitsYield(parseFloat(e.target.value) || 0)}
+                                className="bg-custom-50 border-custom-300"
+                            />
+                            <Label className="text-custom-800">Preço por Unidade</Label>
+                            <Input
+                                type="text"
+                                value={`R$ ${pricePerUnit.toFixed(2)}`}
+                                readOnly
+                                className="bg-custom-50 border-custom-300"
+                            />
+                            <Label className="text-custom-800">Custo de Embalagem</Label>
+                            <Input
+                                type="number"
+                                value={packagingCost}
+                                onChange={(e) => setPackagingCost(parseFloat(e.target.value) || 0)}
+                                className="bg-custom-50 border-custom-300"
+                            />
+                            <Label className="text-custom-800">Quantidade de Embalagem</Label>
+                            <Input
+                                type="number"
+                                value={packagingQuantity}
+                                onChange={(e) => setPackagingQuantity(parseFloat(e.target.value) || 1)}
+                                className="bg-custom-50 border-custom-300"
+                            />
+                            <Label className="text-custom-800">Preço Final por Unidade</Label>
+                            <Input
+                                type="text"
+                                value={`R$ ${finalPricePerUnit.toFixed(2)}`}
+                                readOnly
+                                className="bg-custom-50 border-custom-300"
+                            />
                         </div>
-                    </CardContent>
-                    <CardFooter className="w-full flex justify-center">
-                        <Button onClick={addIngredient} className="bg-custom-400 dark:bg-dark-custom-400 hover:bg-custom-600 dark:hover:bg-dark-custom-600 text-white font-bold py-2 px-4 rounded">
-                            <PlusIcon className="h-4 w-4 mr-2" />
-                            Adicionar Ingrediente
+                    </div>
+
+                    <CardFooter>
+                        <Button type="submit" disabled={processing} className="bg-custom-500 hover:bg-custom-600 text-white">
+                            {processing ? 'Salvando...' : 'Salvar Precificação'}
                         </Button>
                     </CardFooter>
-                    <div className="flex items-center justify-center mt-4 w-full">
-                        <Button type="submit" className="bg-custom-500 dark:bg-dark-custom-500 hover:bg-custom-700 dark:hover:bg-dark-custom-700 text-white font-bold py-2 px-4 rounded">
-                            Calcular
-                        </Button>
-                    </div>
                 </form>
-            </Card>
+            </div>
         </>
     );
-}
-
-function PlusIcon(props: JSX.IntrinsicAttributes & SVGProps<SVGSVGElement>) {
-    return (
-        <svg
-            {...props}
-            xmlns="http://www.w3.org/2000/svg"
-            width="24"
-            height="24"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            strokeWidth="2"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-        >
-            <path d="M5 12h14" />
-            <path d="M12 5v14" />
-        </svg>
-    )
-}
-
-function TrashIcon(props: JSX.IntrinsicAttributes & SVGProps<SVGSVGElement>) {
-    return (
-        <svg
-            {...props}
-            xmlns="http://www.w3.org/2000/svg"
-            width="24"
-            height="24"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            strokeWidth="2"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-        >
-            <path d="M3 6h18" />
-            <path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6" />
-            <path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2" />
-        </svg>
-    )
 }

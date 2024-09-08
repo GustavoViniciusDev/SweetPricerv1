@@ -36,31 +36,12 @@ export default function Login({ status, canResetPassword }: { status?: string, c
         <>
             <GuestLayout>
                 <Head title="Entrar" />
-                <div className="mb-10">
-                    <header className={`fixed top-0 left-0 w-full px-4 lg:px-6 h-14 flex items-center ${scrolled ? 'shadow-md' : ''} z-50 transition-shadow duration-300`}>
-                        <Link href="/" className="flex items-center justify-center">
-                            <h2 className='text-2xl text-custom-700 dark:text-dark-custom-200'>SweetPricer</h2>
-                        </Link>
-                        <nav className="ml-auto flex gap-4 sm:gap-6">
-                                <Link
-                                    href="/"
-                                    className="bg-transparent text-custom-700 dark:text-dark-custom-200 font-semibold py-2 px-4 border border-custom-400 dark:border-dark-custom-400 hover:border-custom-700 dark:hover:border-dark-custom-700 rounded"
-                                >
-                                    Voltar
-                                </Link>
-                            <Link
-                                href={route('register')}
-                                className="bg-custom-400 dark:bg-dark-custom-400 hover:bg-custom-500 dark:hover:bg-dark-custom-500 text-white font-bold py-2 px-4 border border-custom-500 dark:border-dark-custom-500 rounded"
-                            >
-                                Criar Conta
-                            </Link>
-                        </nav>
-                    </header>
-                </div>
+
 
                 {status && <div className="mb-4 font-medium text-sm text-green-600">{status}</div>}
 
                 <form onSubmit={submit} className="space-y-4">
+                <h2 className="text-center text-custom-700 dark:text-dark-custom-200 text-2xl font-bold mb-4">Entre na sua conta</h2>
                     <div>
                         <InputLabel htmlFor="email" value="Email" />
 
@@ -92,17 +73,21 @@ export default function Login({ status, canResetPassword }: { status?: string, c
                         />
 
                         <InputError message={errors.password} className="mt-2" />
-                    </div>
-
-                    <div className="flex items-center justify-end mt-8">
-                        {canResetPassword && (
-                            <Link
+                        <Link
                                 href={route('password.request')}
                                 className="underline text-sm text-custom-500 dark:text-dark-custom-100 hover:text-custom-600 dark:hover:text-dark-custom-200 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-custom-500 dark:focus:ring-dark-custom-500"
                             >
                                 Esqueceu sua senha?
                             </Link>
-                        )}
+                    </div>
+
+                    <div className="flex items-center justify-end mt-8">
+                    <Link
+                        href={route('register')}
+                        className="underline text-sm text-custom-500 dark:text-dark-custom-100 hover:text-custom-600 dark:hover:text-dark-custom-200 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-custom-500 dark:focus:ring-dark-custom-500"
+                    >
+                        Não possui conta?
+                    </Link>
 
                         <Button type="submit" className="ms-4 bg-custom-400 dark:bg-dark-custom-500 hover:bg-custom-600 dark:hover:bg-dark-custom-600 text-white font-bold py-2 px-4 border border-custom-500 dark:border-dark-custom-500 rounded-xl" disabled={processing}>
                             Entrar

@@ -23,7 +23,7 @@ class PricingPerUser extends Model
 
     public function pricingDetails()
     {
-        return $this->belongsTo(PricingDetail::class, 'id_pricing_details');
+        return $this->hasOne(PricingDetail::class, 'pricing_id', 'id');
     }
 }
 

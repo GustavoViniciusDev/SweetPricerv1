@@ -1,6 +1,6 @@
 import { PageProps } from '@/types';
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
-import { Head } from '@inertiajs/react';
+import { Head, Link } from '@inertiajs/react';
 
 interface PricingDetail {
     id: number;
@@ -39,25 +39,25 @@ export default function ShowDetailsPricing({ auth, pricingDetails }: PricingPage
                     <h2 className="text-2xl font-bold text-custom-600 dark:text-dark-custom-300">Detalhes da Precificação</h2>
                     <div className="grid sm:grid-cols-2 gap-6">
                         <div className="grid gap-2 bg-custom-100 dark:bg-dark-custom-100 p-4 rounded-lg">
-                            <p className="text-sm text-custom-500 dark:text-dark-custom-200">Total de Ingredientes</p>
+                            <p className="text-sm text-custom-500 dark:text-dark-custom-200">Custo com Ingredientes</p>
                             <p className="text-3xl font-bold text-custom-600 dark:text-dark-custom-300">
                                 R$ {toFixed(pricingDetails.total_ingredients_cost)}
                             </p>
                         </div>
                         <div className="grid gap-2 bg-custom-100 dark:bg-dark-custom-100 p-4 rounded-lg">
-                            <p className="text-sm text-custom-500 dark:text-dark-custom-200">Adiciona 25% (custos incalculáveis, gás, luz, etc)</p>
+                            <p className="text-sm text-custom-500 dark:text-dark-custom-200">Adicional de 25% (custos incalculáveis, gás, luz, etc)</p>
                             <p className="text-3xl font-bold text-custom-600 dark:text-dark-custom-300">
                                 R$ {toFixed(pricingDetails.additional_costs)}
                             </p>
                         </div>
                         <div className="grid gap-2 bg-custom-100 dark:bg-dark-custom-100 p-4 rounded-lg">
-                            <p className="text-sm text-custom-500 dark:text-dark-custom-200">Rendimento / quantas unidades</p>
+                            <p className="text-sm text-custom-500 dark:text-dark-custom-200">Rendimento por unidades</p>
                             <p className="text-3xl font-bold text-custom-600 dark:text-dark-custom-300">
                                 {Number(pricingDetails.units_yield).toFixed(0)}
                             </p>
                         </div>
                         <div className="grid gap-2 bg-custom-100 dark:bg-dark-custom-100 p-4 rounded-lg">
-                            <p className="text-sm text-custom-500 dark:text-dark-custom-200">Preço Unitário</p>
+                            <p className="text-sm text-custom-500 dark:text-dark-custom-200">Preço Unitário sem embalagem</p>
                             <p className="text-3xl font-bold text-custom-600 dark:text-dark-custom-300">
                                 R$ {toFixed(pricingDetails.price_per_unit)}
                             </p>
@@ -65,22 +65,30 @@ export default function ShowDetailsPricing({ auth, pricingDetails }: PricingPage
                     </div>
                     <div className="grid gap-6">
                         <div className="grid gap-2 bg-custom-100 dark:bg-dark-custom-100 p-4 rounded-lg">
-                            <h3 className="text-lg font-semibold text-custom-600 dark:text-dark-custom-300">Embalagem</h3>
-                            <p className="text-sm text-custom-500 dark:text-dark-custom-200">Embalagem</p>
+                            <h3 className="text-lg font-semibold text-custom-600 dark:text-dark-custom-300">Preço da Embalagem</h3>
                             <p className="text-3xl font-bold text-custom-600 dark:text-dark-custom-300">
                                 R$ {toFixed(pricingDetails.packaging_cost)}
                             </p>
                         </div>
                         <div className="grid gap-2 bg-custom-100 dark:bg-dark-custom-100 p-4 rounded-lg">
                             <h3 className="text-lg font-semibold text-custom-600 dark:text-dark-custom-300">Preço Final</h3>
-                            <p className="text-sm text-custom-500 dark:text-dark-custom-200">Preço Final Unitário</p>
+                            <p className="text-sm text-custom-500 dark:text-dark-custom-200">Preço Final com Embalagem</p>
                             <p className="text-3xl font-bold text-custom-600 dark:text-dark-custom-300">
                                 R$ {toFixed(pricingDetails.final_price_per_unit)}
                             </p>
                         </div>
                     </div>
+                    <div className="text-center mt-6">
+                        <Link
+                            href={route('dashboard')}
+                            className="inline-block bg-custom-400 dark:bg-dark-custom-500 hover:bg-custom-600 dark:hover:bg-dark-custom-600 text-white font-bold px-4 py-2 rounded-xl border border-custom-500 dark:border-dark-custom-500"
+                        >
+                            Voltar para o Tela Inicial
+                        </Link>
+                    </div>
                 </div>
             </div>
+
         </>
     );
 }

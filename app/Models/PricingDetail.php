@@ -22,4 +22,9 @@ class PricingDetail extends Model
         'final_price_per_unit',
     ];
 
+    public function pricingPerUser()
+    {
+        return $this->belongsTo(PricingPerUser::class, 'pricing_id');
+    }
+
 }

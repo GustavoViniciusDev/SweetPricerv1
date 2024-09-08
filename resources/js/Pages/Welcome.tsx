@@ -1,10 +1,10 @@
 import { Link, Head } from '@inertiajs/react';
 import { PageProps } from '@/types';
 import { Card, CardHeader, CardTitle, CardDescription, CardContent } from "@/Components/ui/card";
+import { Accordion, AccordionItem, AccordionTrigger, AccordionContent } from "@/Components/ui/accordion"
 import { JSX, SVGProps, useRef, useEffect, useState } from "react";
 import { motion, useInView } from "framer-motion";
 import ClientSlider from './SliderClients';
-import { ThemeToggle } from '@/Components/ThemeToggle';
 
 export default function Welcome({ auth }: PageProps<{ laravelVersion: string, phpVersion: string }>) {
     const text = "Valorizando cada doce com precisão".split(" ");
@@ -42,16 +42,10 @@ export default function Welcome({ auth }: PageProps<{ laravelVersion: string, ph
                         ) : (
                             <>
                                 <Link
-                                    href={route('login')}
-                                    className="bg-transparent text-custom-700 dark:text-dark-custom-200 font-semibold py-2 px-4 border border-custom-400 dark:border-dark-custom-400 hover:border-custom-700 dark:hover:border-dark-custom-700 rounded"
-                                >
-                                    Entrar
-                                </Link>
-                                <Link
                                     href={route('register')}
                                     className="bg-custom-400 dark:bg-dark-custom-400 hover:bg-custom-500 dark:hover:bg-dark-custom-500 text-white font-bold py-2 px-4 border border-custom-500 dark:border-dark-custom-500 rounded"
                                 >
-                                    Criar Conta
+                                    Começar
                                 </Link>
                             </>
                         )}
@@ -68,9 +62,9 @@ export default function Welcome({ auth }: PageProps<{ laravelVersion: string, ph
                             animate={inViews[index] ? { opacity: 1, y: 0 } : { opacity: 0, y: 50 }}
                             transition={{ duration: 0.8 }}
                         >
-                            <div className="container space-y-10 xl:space-y-16">
+                            <div className="max-w-5xl mx-auto">
                                 {index === 0 && (
-                                    <div className="grid gap-4 px-10 md:grid-cols-2 md:gap-16 items-center justify-center">
+                                    <div className="mt-10 grid gap-4 px-10 md:grid-cols-2 md:gap-16 items-center justify-center">
                                         <h1 className="lg:leading-tighter text-custom-700 dark:text-dark-custom-200 text-5xl font-bold tracking-tighter sm:text-4xl md:text-5xl xl:text-[3.4rem] 2xl:text-[3.75rem]">
                                             {text.map((el, i) => (
                                                 <motion.span
@@ -108,22 +102,124 @@ export default function Welcome({ auth }: PageProps<{ laravelVersion: string, ph
                                     </div>
                                 )}
                                 {index === 2 && (
-                                    <div className="container px-4 md:px-6">
-                                        <div className="grid items-center gap-6 lg:grid-cols-[1fr_500px] lg:gap-12 xl:grid-cols-[1fr_550px]">
-                                            <div className="space-y-2">
-                                                <div className="inline-block rounded-lg bg-custom-100 dark:bg-dark-custom-100 px-3 py-1 text-sm text-custom-700 dark:text-dark-custom-200">Nossas Ferramentas</div>
-                                                <h2 className="text-3xl font-bold tracking-tighter sm:text-5xl text-custom-700 dark:text-dark-custom-200">{title}</h2>
-                                                <p className="max-w-[600px] text-custom-600 dark:text-dark-custom-300 md:text-xl/relaxed lg:text-base/relaxed xl:text-xl/relaxed">
-                                                    Feito pensando nas suas necessidades e da sua equipe.
-                                                </p>
+                                    <section className="py-12 md:py-16 lg:py-20 px-4 md:px-6 lg:px-8">
+                                        <div className="max-w-5xl mx-auto">
+                                            <h2 className="text-3xl md:text-4xl font-bold mb-4 text-custom-700 dark:text-dark-custom-200">
+                                                Funcionalidades
+                                            </h2>
+                                            <p className="text-custom-600 dark:text-dark-custom-300 mb-8">
+                                            O SweetPricer é uma ferramenta poderosa que auxilia você a precificar seus produtos de forma fácil e eficiente, garantindo que não saia no prejuízo.
+                                            </p>
+                                            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+                                                {[
+                                                    {
+                                                        title: 'Precificação',
+                                                        description: 'Define o preço de venda considerando custos dos ingredientes e margens de lucros.'
+                                                    },
+                                                    {
+                                                        title: 'Histórico',
+                                                        description: 'Armazena todas as suas precificações feitas anteriormente, podendo editar ou excluir.'
+                                                    },
+                                                    {
+                                                        title: 'Cadastro de Receitas',
+                                                        description: 'Permite o cadastro e gerenciamento das receitas, incluindo a lista de ingredientes e suas quantidades.'
+                                                    },
+                                                    {
+                                                        title: 'Controle de Estoque',
+                                                        description: 'Gerencia o estoque de ingredientes, recebendo alertas quando o nível estiver baixo.'
+                                                    },
+                                                    {
+                                                        title: 'Relatório de Vendas',
+                                                        description: 'Gera relatórios detalhados sobre suas vendas, ajudando a analisar o desempenho do seu negócio.'
+                                                    }
+                                                ].map((feature, index) => (
+                                                    <div
+                                                        key={index}
+                                                        className="relative p-6 bg-white dark:bg-dark-custom-100 border border-gray-200 dark:border-dark-custom-300 rounded-lg shadow-sm hover:shadow-md transition-all duration-500 ease-in-out transform hover:scale-105"
+                                                    >
+                                                        <h3 className="text-xl font-semibold mb-2 text-custom-700 dark:text-dark-custom-200">
+                                                            {feature.title}
+                                                        </h3>
+                                                        <p className="text-custom-600 dark:text-dark-custom-300">
+                                                            {feature.description}
+                                                        </p>
+                                                    </div>
+                                                ))}
                                             </div>
-                                            <FeatureList />
                                         </div>
-                                    </div>
+                                    </section>
+
                                 )}
                                 {index === 3 && (
                                     <div className="container px-4 md:px-6">
                                         <PricingSection />
+                                    </div>
+                                )}
+                                {index === 3 && (
+                                    <div className="container px-4 md:px-6">
+                                        <section className="bg-muted py-12 md:py-16 lg:py-20 px-4 md:px-6 lg:px-8">
+                                            <div className="max-w-5xl mx-auto">
+                                                <h2 className="text-3xl md:text-4xl font-bold mb-4 text-custom-700 dark:text-dark-custom-200">Perguntas Frequentes (FAQ)</h2>
+                                                <p className="text-custom-600 dark:text-dark-custom-300 mb-8">
+                                                    Encontre respostas para suas perguntas sobre o SweetPricer.
+                                                </p>
+                                                <Accordion type="single" collapsible>
+                                                    <AccordionItem value="o-que-e-sweetpricer">
+                                                        <AccordionTrigger className="text-lg font-semibold text-custom-700 dark:text-dark-custom-200">
+                                                            O que é o SweetPricer?
+                                                        </AccordionTrigger>
+                                                        <AccordionContent>
+                                                            <p className="text-custom-600 dark:text-dark-custom-300">
+                                                                O SweetPricer é uma plataforma poderosa de gestão de preços e estoque projetada para empresas do setor
+                                                                alimentício e de bebidas. Ele ajuda a otimizar seus preços, gerenciar seu estoque e obter insights valiosos
+                                                                para impulsionar o seu negócio.
+                                                            </p>
+                                                        </AccordionContent>
+                                                    </AccordionItem>
+                                                    <AccordionItem value="como-funciona">
+                                                        <AccordionTrigger className="text-lg font-semibold text-custom-700 dark:text-dark-custom-200">
+                                                            Como o SweetPricer funciona?
+                                                        </AccordionTrigger>
+                                                        <AccordionContent>
+                                                            <p className="text-custom-600 dark:text-dark-custom-300">
+                                                            O SweetPricer funciona de maneira simples e intuitiva. O usuário insere os ingredientes de uma receita
+                                                            específica, informando as quantidades e os valores pagos por cada um. Com base nessas informações, o
+                                                            sistema calcula automaticamente o valor ideal para venda do produto, garantindo que o preço não seja
+                                                            nem muito alto, para evitar afastar clientes, nem muito baixo, para evitar prejuízos. O objetivo do
+                                                            SweetPricer é facilitar a precificação, ajudando o usuário a descobrir o valor justo de seus produtos
+                                                            de forma prática e eficiente.
+                                                            </p>
+                                                        </AccordionContent>
+                                                    </AccordionItem>
+                                                    <AccordionItem value="precos-e-planos">
+                                                        <AccordionTrigger className="text-lg font-semibold text-custom-700 dark:text-dark-custom-200">
+                                                            Quais são os preços e planos do SweetPricer?
+                                                        </AccordionTrigger>
+                                                        <AccordionContent>
+                                                            <p className="text-custom-600 dark:text-dark-custom-300">
+                                                                O SweetPricer oferece planos de preços flexíveis para atender todos os tipos de clientes. Nosso plano
+                                                                básico começa a partir de R$ 29,90 por mês e inclui recursos principais como precificação e histórico
+                                                                Também oferecemos outros dois planos o Pró custando R$ 39,90 por mês que oferece tudo que o plano básico
+                                                                tem mais cadastro de receitas e o nosso plano Master custando apenas R$ 89,90 por mês oferecendo tudo que
+                                                                o plano Pró oferece junto a controle de estoque e gestão e relatório de vendas.
+                                                            </p>
+                                                        </AccordionContent>
+                                                    </AccordionItem>
+                                                    {/* <AccordionItem value="suporte-ao-cliente">
+                                                        <AccordionTrigger className="text-lg font-semibold text-custom-700 dark:text-dark-custom-200">
+                                                            Que tipo de suporte ao cliente o SweetPricer oferece?
+                                                        </AccordionTrigger>
+                                                        <AccordionContent>
+                                                            <p className="text-custom-600 dark:text-dark-custom-300">
+                                                                No SweetPricer, estamos comprometidos em fornecer um suporte ao cliente excepcional. Nossa equipe de
+                                                                especialistas está disponível para ajudar com qualquer dúvida ou problema que você possa ter, seja por meio
+                                                                de suporte por e-maail, vídeo chamadas, ligações e whatsapp.
+                                                            </p>
+                                                        </AccordionContent>
+                                                    </AccordionItem> */}
+                                                </Accordion>
+                                            </div>
+                                        </section>
                                     </div>
                                 )}
                             </div>

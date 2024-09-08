@@ -1,4 +1,8 @@
-import { Link } from '@inertiajs/react';
+import { Link, useForm } from '@inertiajs/react';
+import { FaTrash } from 'react-icons/fa';
+import { useState } from 'react';
+import { toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 interface Pricing {
     id: number;
@@ -11,11 +15,32 @@ interface ListPricingsProps {
     list_pricings: Pricing[];
 }
 
+interface FlashProps {
+    success?: string;
+    error?: string;
+}
+
 export default function ListPricings({ list_pricings }: ListPricingsProps) {
+    const [confirmDelete, setConfirmDelete] = useState<number | null>(null);
+    const { delete: destroy } = useForm();
+
+    const handleDelete = (pricingId: number) => {
+        destroy(`/pricing/${pricingId}`, {
+            onSuccess: () => {
+                toast.success('Precificação excluida com sucesso!');
+
+                setConfirmDelete(null);
+            },
+            onError: () => {
+                toast.error("Ocorreu um erro ao tentar excluir a precificação.");
+            },
+        });
+    };
+
     return (
         <div className="container mx-auto px-4 py-8">
             <h1 className="mb-6 text-3xl font-bold text-custom-600 dark:text-dark-custom-300 text-center">
-                Lista de Precificações
+                Histórico de Precificações
             </h1>
             {list_pricings.length === 0 ? (
                 <p className="text-center text-custom-500 dark:text-dark-custom-100 text-2xl font-semibold py-4">
@@ -23,31 +48,66 @@ export default function ListPricings({ list_pricings }: ListPricingsProps) {
                 </p>
             ) : (
                 <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
-                {list_pricings.map((pricing) => (
-                    <div key={pricing.id} className="rounded-xl border border-custom-300 dark:border-dark-custom-300 bg-custom-50 dark:bg-dark-custom-50 p-6 shadow-md flex flex-col justify-between">
-                        <div>
-                            <h2 className="mb-2 text-xl font-semibold text-custom-600 dark:text-dark-custom-300">{pricing.name_pricing}</h2>
-                            <p className="mb-4 text-custom-500 dark:text-dark-custom-100">
-                                Description or additional details about the pricing can be added here.
-                            </p>
+                    {list_pricings.map((pricing) => (
+                        <div key={pricing.id} className="rounded-xl border border-custom-300 dark:border-dark-custom-300 bg-custom-50 dark:bg-dark-custom-50 p-6 shadow-md flex flex-col justify-between">
+                            <div className="flex justify-between">
+                                <div>
+                                    <h2 className="mb-2 text-xl font-semibold text-custom-600 dark:text-dark-custom-300">
+                                        Precificação: {pricing.name_pricing}
+                                    </h2>
+                                    <p className="mb-4 text-custom-500 dark:text-dark-custom-100">
+                                        Precificação criada
+                                    </p>
+                                </div>
+                                <button
+                                    onClick={() => setConfirmDelete(pricing.id)}
+                                    className="text-red-500 hover:text-red-700"
+                                    title="Excluir precificação"
+                                >
+                                    <FaTrash className="text-xl" />
+                                </button>
+                            </div>
+                            <div className="flex justify-between mt-auto">
+                                <Link
+                                    href={`/pricing-details/${pricing.id_pricing_details}`}
+                                    className="inline-block bg-custom-400 dark:bg-dark-custom-500 hover:bg-custom-600 dark:hover:bg-dark-custom-600 text-white font-bold px-4 py-2 border border-custom-500 dark:border-dark-custom-500 rounded-xl"
+                                >
+                                    Ver Preço
+                                </Link>
+                                <Link
+                                    href={`/edit-pricing/${pricing.id}`}
+                                    className="inline-block text-custom-500 dark:text-dark-custom-200 border-custom-300 dark:border-dark-custom-300 px-4 py-2 rounded-xl"
+                                >
+                                    Editar
+                                </Link>
+                            </div>
                         </div>
-                        <div className="flex justify-between mt-auto">
-                            <Link
-                                href={`/pricing-details/${pricing.id_pricing_details ?? pricing.id}`}
-                                className="inline-block bg-custom-400 dark:bg-dark-custom-500 hover:bg-custom-600 dark:hover:bg-dark-custom-600 text-white font-bold px-4 py-2 border border-custom-500 dark:border-dark-custom-500 rounded-xl"
+                    ))}
+                </div>
+            )}
+
+            {confirmDelete && (
+                <div className="fixed inset-0 bg-gray-600 bg-opacity-50 flex justify-center items-center">
+                    <div className="bg-white dark:bg-dark-custom-50 p-6 rounded-lg shadow-lg">
+                        <h2 className="text-xl font-semibold mb-4 text-red-600">
+                            Você tem certeza que deseja excluir essa precificação?
+                        </h2>
+                        <div className="flex justify-end space-x-4">
+                            <button
+                                className="bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded"
+                                onClick={() => handleDelete(confirmDelete)}
                             >
-                                Ver Preço
-                            </Link>
-                            <Link
-                                href={`/edit-pricing/${pricing.id}`}
-                                className="inline-block text-custom-500 dark:text-dark-custom-200 border-custom-300 dark:border-dark-custom-300 px-4 py-2 rounded-xl"
+                                Excluir
+                            </button>
+                            <button
+                                className="bg-gray-300 hover:bg-gray-400 text-gray-800 px-4 py-2 rounded"
+                                onClick={() => setConfirmDelete(null)}
                             >
-                                Editar
-                            </Link>
+                                Cancelar
+                            </button>
                         </div>
                     </div>
-                ))}
-            </div>
+                </div>
             )}
         </div>
     );
