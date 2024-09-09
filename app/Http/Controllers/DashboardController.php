@@ -9,14 +9,14 @@ use Illuminate\Support\Facades\Auth;
 class DashboardController
 {
     public function index()
-{
-    $userId = Auth::id();
+    {
+        $userId = Auth::id();
 
-    $list_pricings = PricingPerUser::where('user_id', $userId)
+        $list_pricings = PricingPerUser::where('user_id', $userId)
             ->orderByDesc('created_at')
             ->with('pricingDetails')
             ->get()
-            ->map(function($pricing) {
+            ->map(function ($pricing) {
                 return [
                     'id' => $pricing->id,
                     'name_pricing' => $pricing->name_pricing,
@@ -25,8 +25,8 @@ class DashboardController
                 ];
             });
 
-    return Inertia::render('Dashboard', [
-        'list_pricings' => $list_pricings,
-    ]);
-}
+        return Inertia::render('Dashboard', [
+            'list_pricings' => $list_pricings,
+        ]);
+    }
 }

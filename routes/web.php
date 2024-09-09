@@ -7,6 +7,7 @@ use App\Http\Controllers\Pricing\RegisterPricingController;
 use App\Http\Controllers\Pricing\IngredientController;
 use App\Http\Controllers\Pricing\PricingController;
 use App\Http\Controllers\Pricing\PricingDetailController;
+use App\Http\Controllers\PricingHistory\PricingHistoryController;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
@@ -56,6 +57,7 @@ Route::middleware('auth', 'verified')->group(function () {
     Route::get('/pricing-details/{id}', [PricingController::class, 'showPricingDetails'])->name('pricing_details.finalized');
     Route::delete('/pricing/{id}', [PricingController::class, 'destroy'])->name('pricing.destroy');
 
+    // Route::get('/pricing-history', [PricingHistoryController::class, 'index'])->name('pricing_history.index');
 });
 
 require __DIR__.'/auth.php';
