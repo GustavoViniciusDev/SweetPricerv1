@@ -15,26 +15,25 @@ interface ListPricingsProps {
     list_pricings: Pricing[];
 }
 
-interface FlashProps {
-    success?: string;
-    error?: string;
-}
-
 export default function ListPricings({ list_pricings }: ListPricingsProps) {
     const [confirmDelete, setConfirmDelete] = useState<number | null>(null);
+    const [showIncompleteModal, setShowIncompleteModal] = useState<number | null>(null); // Track incomplete pricing modal
     const { delete: destroy } = useForm();
 
     const handleDelete = (pricingId: number) => {
         destroy(`/pricing/${pricingId}`, {
             onSuccess: () => {
-                toast.success('Precificação excluida com sucesso!');
-
+                toast.success('Precificação excluída com sucesso!');
                 setConfirmDelete(null);
             },
             onError: () => {
                 toast.error("Ocorreu um erro ao tentar excluir a precificação.");
             },
         });
+    };
+
+    const handleIncompletePricing = (pricingId: number) => {
+        setShowIncompleteModal(pricingId);
     };
 
     return (
@@ -68,12 +67,21 @@ export default function ListPricings({ list_pricings }: ListPricingsProps) {
                                 </button>
                             </div>
                             <div className="flex justify-between mt-auto">
-                                <Link
-                                    href={`/pricing-details/${pricing.id_pricing_details}`}
-                                    className="inline-block bg-custom-400 dark:bg-dark-custom-500 hover:bg-custom-600 dark:hover:bg-dark-custom-600 text-white font-bold px-4 py-2 border border-custom-500 dark:border-dark-custom-500 rounded-xl"
-                                >
-                                    Ver Preço
-                                </Link>
+                                {pricing.id_pricing_details ? (
+                                    <Link
+                                        href={`/pricing-details/${pricing.id_pricing_details}`}
+                                        className="inline-block bg-custom-400 dark:bg-dark-custom-500 hover:bg-custom-600 dark:hover:bg-dark-custom-600 text-white font-bold px-4 py-2 border border-custom-500 dark:border-dark-custom-500 rounded-xl"
+                                    >
+                                        Ver Preço
+                                    </Link>
+                                ) : (
+                                    <button
+                                        onClick={() => handleIncompletePricing(pricing.id)}
+                                        className="inline-block bg-custom-400 dark:bg-dark-custom-500 hover:bg-custom-600 dark:hover:bg-dark-custom-600 text-white font-bold px-4 py-2 border border-custom-500 dark:border-dark-custom-500 rounded-xl"
+                                    >
+                                        Ver Preço
+                                    </button>
+                                )}
                                 <Link
                                     href={`/edit-pricing/${pricing.id}`}
                                     className="inline-block text-custom-500 dark:text-dark-custom-200 border-custom-300 dark:border-dark-custom-300 px-4 py-2 rounded-xl"
@@ -102,6 +110,30 @@ export default function ListPricings({ list_pricings }: ListPricingsProps) {
                             <button
                                 className="bg-gray-300 hover:bg-gray-400 text-gray-800 px-4 py-2 rounded"
                                 onClick={() => setConfirmDelete(null)}
+                            >
+                                Cancelar
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            )}
+
+            {showIncompleteModal && (
+                <div className="fixed inset-0 bg-gray-600 bg-opacity-50 flex justify-center items-center">
+                    <div className="bg-white dark:bg-dark-custom-50 p-6 rounded-lg shadow-lg">
+                        <h2 className="text-xl font-semibold mb-4 text-custom-600">
+                            Você não finalizou sua precificação.
+                        </h2>
+                        <div className="flex justify-end space-x-4">
+                            <Link
+                                href={`/edit-pricing/${showIncompleteModal}`}
+                                className="bg-custom-500 hover:bg-custom-600 text-white px-4 py-2 rounded"
+                            >
+                                Clique aqui para finalizar
+                            </Link>
+                            <button
+                                className="bg-gray-300 hover:bg-gray-400 text-gray-800 px-4 py-2 rounded"
+                                onClick={() => setShowIncompleteModal(null)}
                             >
                                 Cancelar
                             </button>
