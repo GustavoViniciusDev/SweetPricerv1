@@ -48,48 +48,50 @@ export default function ListPricings({ list_pricings }: ListPricingsProps) {
             ) : (
                 <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
                     {list_pricings.map((pricing) => (
-                        <div key={pricing.id} className="rounded-xl border border-custom-300 dark:border-dark-custom-300 bg-custom-50 dark:bg-dark-custom-50 p-6 shadow-md flex flex-col justify-between">
-                            <div className="flex justify-between">
+                        <div key={pricing.id} className="rounded-xl border border-custom-300 dark:border-dark-custom-300 bg-custom-50 dark:bg-dark-custom-50 p-6 shadow-md flex flex-col justify-between space-y-4">
+                            <div className="flex justify-between items-start">
                                 <div>
-                                    <h2 className="mb-2 text-xl font-semibold text-custom-600 dark:text-dark-custom-300">
+                                    <h2 className="text-xl font-semibold text-custom-600 dark:text-dark-custom-300">
                                         Precificação: {pricing.name_pricing}
                                     </h2>
-                                    <p className="mb-4 text-custom-500 dark:text-dark-custom-100">
+                                    <p className="text-custom-500 dark:text-dark-custom-100">
                                         Precificação criada
                                     </p>
                                 </div>
                                 <button
                                     onClick={() => setConfirmDelete(pricing.id)}
-                                    className="text-red-500 hover:text-red-700"
+                                    className="text-red-500 hover:text-red-700 transition-colors"
                                     title="Excluir precificação"
                                 >
-                                    <FaTrash className="text-xl" />
+                                    <FaTrash className="text-2xl" />
                                 </button>
                             </div>
-                            <div className="flex justify-between mt-auto">
+
+                            <div className="flex justify-between items-center mt-auto">
                                 {pricing.id_pricing_details ? (
                                     <Link
                                         href={`/pricing-details/${pricing.id_pricing_details}`}
-                                        className="inline-block bg-custom-400 dark:bg-dark-custom-500 hover:bg-custom-600 dark:hover:bg-dark-custom-600 text-white font-bold px-4 py-2 border border-custom-500 dark:border-dark-custom-500 rounded-xl"
+                                        className="inline-block bg-custom-400 dark:bg-dark-custom-500 hover:bg-custom-600 dark:hover:bg-dark-custom-600 text-white font-bold px-4 py-2 rounded-xl transition-colors"
                                     >
                                         Ver Preço
                                     </Link>
                                 ) : (
                                     <button
                                         onClick={() => handleIncompletePricing(pricing.id)}
-                                        className="inline-block bg-custom-400 dark:bg-dark-custom-500 hover:bg-custom-600 dark:hover:bg-dark-custom-600 text-white font-bold px-4 py-2 border border-custom-500 dark:border-dark-custom-500 rounded-xl"
+                                        className="inline-block bg-custom-400 dark:bg-dark-custom-500 hover:bg-custom-600 dark:hover:bg-dark-custom-600 text-white font-bold px-4 py-2 rounded-xl transition-colors"
                                     >
                                         Ver Preço
                                     </button>
                                 )}
                                 <Link
                                     href={`/edit-pricing/${pricing.id}`}
-                                    className="inline-block text-custom-500 dark:text-dark-custom-200 border-custom-300 dark:border-dark-custom-300 px-4 py-2 rounded-xl"
+                                    className="inline-block text-custom-500 dark:text-dark-custom-200 border border-custom-300 dark:border-dark-custom-300 px-4 py-2 rounded-xl transition-colors"
                                 >
                                     Editar
                                 </Link>
                             </div>
                         </div>
+
                     ))}
                 </div>
             )}

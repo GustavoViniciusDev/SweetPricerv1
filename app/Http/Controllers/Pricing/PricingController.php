@@ -10,36 +10,6 @@ use Inertia\Inertia;
 
 class PricingController
 {
-    public function storeIngredients(Request $request)
-    {
-        $request->validate([
-            'pricing_id' => 'required|exists:pricing_per_user,id',
-            'ingredients.*.name' => 'required|string',
-            'ingredients.*.quantity' => 'required|numeric',
-            'ingredients.*.cost' => 'required|numeric',
-        ]);
-
-        $pricingPerUser = PricingPerUser::where('id', $request->input('pricing_id'))
-            ->where('user_id', Auth::id())
-            ->firstOrFail();
-
-        $ingredients = $request->input('ingredients');
-
-        foreach ($ingredients as $ingredientData) {
-            $pricingPerUser->ingredients()->create([
-                'name' => $ingredientData['name'],
-                'quantity' => $ingredientData['quantity'],
-                'cost' => $ingredientData['cost'],
-                'user_id' => Auth::id(),
-            ]);
-        }
-
-        return redirect()->route('calculate_pricing.show', [
-            'pricing_id' => $pricingPerUser->id,
-            'user_id' => Auth::id(),
-        ])->with('success', 'Ingredientes salvos com sucesso!');
-    }
-
     public function showPricing($pricing_id)
     {
         $pricing = PricingPerUser::with('ingredients')
@@ -56,6 +26,7 @@ class PricingController
 
     public function storePricingDetails(Request $request)
     {
+        echo $request;exit;
         $validatedData = $request->validate([
             'total_ingredients_cost' => 'required|numeric',
             'additional_costs' => 'required|numeric',
