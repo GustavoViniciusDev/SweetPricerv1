@@ -1,6 +1,6 @@
     import React, { useEffect, useState, FormEventHandler } from "react";
     import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
-    import { Head, useForm, usePage } from "@inertiajs/react";
+    import { Head, useForm, usePage, Link } from "@inertiajs/react";
     import { Card, CardHeader, CardTitle, CardContent, CardFooter } from "@/Components/ui/card";
     import { Button } from "@/Components/ui/button";
     import { Input } from "@/Components/ui/input";
@@ -113,12 +113,11 @@
                 final_price_per_unit: finalPricePerUnit.toFixed(2),
                 pricing_id: pricing_id ? pricing_id.toString() : '',
                 user_id: user_id ? user_id.toString() : '',
-                ingredients: ingredientList.map((ingredient, index) => ({
-                    ...ingredient,
-                    quantity_used: usedGrams[index] || 0
+                ingredients: ingredientList.map((ingredient) => ({
+                    ...ingredient
                 }))
             }));
-        }, [totalIngredientsCost, additionalCosts, profitAndLaborCost, unitsYield, pricePerUnit, packagingCost, finalPricePerUnit, pricing_id, user_id, ingredientList, usedGrams]);
+        }, [totalIngredientsCost, additionalCosts, profitAndLaborCost, unitsYield, pricePerUnit, packagingCost, finalPricePerUnit, pricing_id, user_id, ingredientList]);
 
         const handleChangeIngredient = (index: number, field: keyof Ingredient, value: string) => {
             const newIngredients = [...ingredientList];
@@ -176,10 +175,10 @@
             />
             <Head title="Precificação" />
             <div className="max-w-4xl mx-auto px-4 md:px-0 mb-10 mt-10">
+
                 <h1 className="text-5xl font-bold mb-8 text-custom-300 text-center">
                     Precificação: {pricing.name_pricing}
                 </h1>
-
                 <form onSubmit={submit} className="space-y-6">
                     <div className="space-y-6">
                         <h2 className="text-3xl font-bold text-custom-300 pl-5">Registro de Ingredientes</h2>
@@ -218,10 +217,9 @@
                                             <Input
                                                 type="number"
                                                 value={ingredient.quantity_used}
-                                                onChange={(e) => handleGramsUsedChange(index, e.target.value)}
+                                                onChange={(e) => handleChangeIngredient(index, "quantity_used", e.target.value)}
                                                 className="bg-custom-50 border-custom-300"
                                             />
-
                                         </div>
                                     </CardContent>
                                     <CardFooter className="flex justify-between items-center">

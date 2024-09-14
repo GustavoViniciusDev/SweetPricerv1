@@ -16,7 +16,20 @@ export default function Authenticated({ user, header, children }: PropsWithChild
                         <div className="flex">
                             <div className="shrink-0 flex items-center">
                                 <Link href={route('dashboard')}>
-                                    <h2 className='text-2xl text-custom-700 dark:text-dark-custom-200'>SweetPricer</h2>
+                                    <img
+                                        src="/images/logo_simples.png"
+                                        width="150"
+                                        height="40"
+                                        alt="cake-shop"
+                                        className="mt-3 mx-auto object-cover"
+                                    />
+                                     {/* <img
+                                        src="/images/icon_logo.png"
+                                        width="80"
+                                        height="40"
+                                        alt="cake-shop"
+                                        className="mx-auto object-cover"
+                                    /> */}
                                 </Link>
                             </div>
 

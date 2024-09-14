@@ -34,6 +34,7 @@ const PricingSection = () => {
     return (
         <div className="mx-auto grid max-w-5xl grid-cols-1 gap-8 py-16 sm:grid-cols-2 md:grid-cols-3 lg:gap-12">
             {plans.map((plan, index) => (
+
                 <Card
                     key={index}
                     className={`relative transition-transform duration-300 ease-in-out transform hover:scale-105 ${clickedIndex === index ? 'scale-105 shadow-xl' : 'shadow-md'} ${clickedIndex === null ? '' : 'filter blur-sm'}`}

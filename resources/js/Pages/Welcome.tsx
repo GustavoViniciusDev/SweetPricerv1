@@ -29,7 +29,13 @@ export default function Welcome({ auth }: PageProps<{ laravelVersion: string, ph
             <div className="flex flex-col min-h-[100dvh] bg-custom-50 dark:bg-dark-custom-50">
                 <header className={`fixed top-0 left-0 w-full px-4 lg:px-6 h-14 flex items-center bg-custom-50 ${scrolled ? 'shadow-md' : ''} z-50 transition-shadow duration-300`}>
                     <Link href="/" className="flex items-center justify-center">
-                        <h2 className='text-2xl text-custom-700 dark:text-dark-custom-200'>SweetPricer</h2>
+                        <img
+                            src="/images/logo_simples.png"
+                            width="150"
+                            height="40"
+                            alt="cake-shop"
+                            className="mt-3 mx-auto object-cover"
+                        />
                     </Link>
                     <nav className="ml-auto flex gap-4 sm:gap-6">
                         {auth.user ? (
@@ -152,6 +158,12 @@ export default function Welcome({ auth }: PageProps<{ laravelVersion: string, ph
                                 )}
                                 {index === 3 && (
                                     <div className="container px-4 md:px-6">
+                                        <h2 className="text-3xl md:text-4xl font-bold mb-4 text-custom-700 dark:text-dark-custom-200">
+                                            Planos
+                                        </h2>
+                                        <p className="text-custom-600 dark:text-dark-custom-300 mb-8">
+                                            Oferecemos planos que cabem no seu bolso e se ajustam perfeitamente às suas necessidades.
+                                        </p>
                                         <PricingSection />
                                     </div>
                                 )}

@@ -17,7 +17,7 @@ interface ListPricingsProps {
 
 export default function ListPricings({ list_pricings }: ListPricingsProps) {
     const [confirmDelete, setConfirmDelete] = useState<number | null>(null);
-    const [showIncompleteModal, setShowIncompleteModal] = useState<number | null>(null); // Track incomplete pricing modal
+    const [showIncompleteModal, setShowIncompleteModal] = useState<number | null>(null);
     const { delete: destroy } = useForm();
 
     const handleDelete = (pricingId: number) => {
@@ -55,7 +55,7 @@ export default function ListPricings({ list_pricings }: ListPricingsProps) {
                                         Precificação: {pricing.name_pricing}
                                     </h2>
                                     <p className="text-custom-500 dark:text-dark-custom-100">
-                                        Precificação criada
+                                        &nbsp;
                                     </p>
                                 </div>
                                 <button
@@ -98,13 +98,13 @@ export default function ListPricings({ list_pricings }: ListPricingsProps) {
 
             {confirmDelete && (
                 <div className="fixed inset-0 bg-gray-600 bg-opacity-50 flex justify-center items-center">
-                    <div className="bg-white dark:bg-dark-custom-50 p-6 rounded-lg shadow-lg">
-                        <h2 className="text-xl font-semibold mb-4 text-red-600">
+                    <div className="bg-white dark:bg-dark-custom-50 p-6 shadow-lg">
+                        <h2 className="text-xl font-semibold mb-4 text-custom-600">
                             Você tem certeza que deseja excluir essa precificação?
                         </h2>
                         <div className="flex justify-end space-x-4">
                             <button
-                                className="bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded"
+                                className="bg-red-500 hover:bg-red-800 text-white px-4 py-2 rounded"
                                 onClick={() => handleDelete(confirmDelete)}
                             >
                                 Excluir
