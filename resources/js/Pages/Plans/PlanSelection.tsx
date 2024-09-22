@@ -23,7 +23,7 @@ const plans = [
         name: "Plano Básico",
         price: "R$ 29,90",
         description: "Cálculo de precificação e histórico de precificações.",
-        price_id: "price_1Q0VavP6UldebLeNqFSE2Thw",
+        price_id: "price_1Q0qK4P6UldebLeNhvIObYVj",
         available: true,
     },
     {
