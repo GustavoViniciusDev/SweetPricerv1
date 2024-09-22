@@ -7,7 +7,7 @@ interface Subscription {
     stripe_status: string;
     type: string;
     created_at: string;
-    ends_at: string | null; // Incluindo ends_at
+    ends_at: string | null;
 }
 
 interface Props extends PageProps {

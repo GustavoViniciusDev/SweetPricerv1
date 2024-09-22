@@ -36,14 +36,14 @@ class ProfileController
                 'mustVerifyEmail' => $request->user() instanceof MustVerifyEmail,
                 'status' => session('status'),
                 'stripeSessionData' => $metadata,
-                'subscription' => $subscription, // Adicione a assinatura aqui
+                'subscription' => $subscription,
             ]);
         }
 
         return Inertia::render('Profile/Edit', [
             'mustVerifyEmail' => $request->user() instanceof MustVerifyEmail,
             'status' => session('status'),
-            'subscription' => $subscription, // Adicione a assinatura aqui
+            'subscription' => $subscription,
         ]);
     }
 
