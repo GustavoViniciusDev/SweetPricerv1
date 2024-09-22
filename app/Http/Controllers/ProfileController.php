@@ -23,7 +23,6 @@ class ProfileController
     {
         $sessionId = $request->get('session_id');
 
-        // Obter assinatura ativa do usuário
         $subscription = Subscription::where('user_id', $request->user()->id)
             ->where('stripe_status', 'active')
             ->first();

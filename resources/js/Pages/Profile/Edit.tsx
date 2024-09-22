@@ -3,9 +3,27 @@ import UpdatePasswordForm from './Partials/UpdatePasswordForm';
 import UpdateProfileInformationForm from './Partials/UpdateProfileInformationForm';
 import ChosePlan from './Partials/ChosePlan';
 import { Head } from '@inertiajs/react';
-import { PageProps } from '@/types';
 
-export default function Edit({ auth, mustVerifyEmail, status, subscription }: PageProps<{ mustVerifyEmail: boolean, status?: string, subscription?: Subscription }>) {
+
+interface Subscriptions {
+    stripe_status: string;
+    type: string;
+    created_at: string;
+    ends_at: string | null;
+}
+
+interface CustomPageProps {
+    mustVerifyEmail: boolean,
+    status?: string,
+    subscriptions?: Subscriptions;
+}
+
+interface PageProps extends CustomPageProps {
+    [key: string]: any;
+}
+
+
+export default function Edit({ auth, mustVerifyEmail, status, subscriptions }: PageProps) {
     return (
         <AuthenticatedLayout
             user={auth.user}
@@ -28,7 +46,7 @@ export default function Edit({ auth, mustVerifyEmail, status, subscription }: Pa
                     </div>
 
                     <div className="p-4 sm:p-8 bg-custom-50 dark:bg-dark-custom-50 shadow sm:rounded-lg">
-                        <ChosePlan subscription={subscription} />
+                        <ChosePlan subscription={subscriptions} auth={auth} />
                     </div>
                 </div>
             </div>
