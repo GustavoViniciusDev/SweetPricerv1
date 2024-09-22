@@ -26,7 +26,7 @@ class PricingController
 
     public function storePricingDetails(Request $request)
     {
-
+        echo $request;exit;
         $validatedData = $request->validate([
             'total_ingredients_cost' => 'required|numeric',
             'additional_costs' => 'required|numeric',

@@ -56,7 +56,7 @@
         const [usedGrams, setUsedGrams] = useState<{ [key: number]: number }>({});
         const [profitMarginMultiplier, setProfitMarginMultiplier] = useState<number>(3);
         const [unitsYield, setUnitsYield] = useState<number>(1);
-        const [packagingCost, setPackagingCost] = useState<number>(0);
+        const [packagingCost, setPackagingCost] = useState<number>(pricing.packaging_cost || 0);
         const [ingredientList, setIngredientList] = useState<Ingredient[]>(ingredients || [{ name: "", quantity: "", quantity_used: "", cost: "" }]);
         const [isModalOpen, setIsModalOpen] = useState(false);
         const [ingredientToRemove, setIngredientToRemove] = useState<number | null>(null);
@@ -317,9 +317,9 @@
                                     <div className="flex items-center border-b border-gray-200 pb-3">
                                         <Label className="text-lg text-gray-700 w-1/2 font-medium">Custo de Embalagem</Label>
                                         <div className="relative w-1/2">
-                                            <Input
+                                        <Input
                                                 type="number"
-                                                value={packagingCost}
+                                                value={packagingCost.toFixed(2)}
                                                 onChange={(e) => setPackagingCost(parseFloat(e.target.value) || 0)}
                                                 className="w-full pl-10 bg-gray-100 border border-gray-300 rounded-md p-3 text-right text-gray-800 placeholder-gray-400"
                                             />

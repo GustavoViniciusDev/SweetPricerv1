@@ -5,7 +5,7 @@ import ChosePlan from './Partials/ChosePlan';
 import { Head } from '@inertiajs/react';
 import { PageProps } from '@/types';
 
-export default function Edit({ auth, mustVerifyEmail, status }: PageProps<{ mustVerifyEmail: boolean, status?: string }>) {
+export default function Edit({ auth, mustVerifyEmail, status, subscription }: PageProps<{ mustVerifyEmail: boolean, status?: string, subscription?: Subscription }>) {
     return (
         <AuthenticatedLayout
             user={auth.user}
@@ -28,7 +28,7 @@ export default function Edit({ auth, mustVerifyEmail, status }: PageProps<{ must
                     </div>
 
                     <div className="p-4 sm:p-8 bg-custom-50 dark:bg-dark-custom-50 shadow sm:rounded-lg">
-                        <ChosePlan />
+                        <ChosePlan subscription={subscription} />
                     </div>
                 </div>
             </div>

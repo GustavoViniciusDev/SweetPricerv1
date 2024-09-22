@@ -10,19 +10,43 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Redirect;
 use Inertia\Inertia;
 use Inertia\Response;
+use Laravel\Cashier\Cashier;
+use Illuminate\Support\Facades\Log;
+use App\Models\Subscription;
 
 class ProfileController
 {
     /**
      * Display the user's profile form.
      */
-    public function edit(Request $request): Response
+   public function edit(Request $request): Response
     {
+        $sessionId = $request->get('session_id');
+
+        // Obter assinatura ativa do usuário
+        $subscription = Subscription::where('user_id', $request->user()->id)
+            ->where('stripe_status', 'active')
+            ->first();
+
+        if ($sessionId) {
+            $metadata = Cashier::stripe()->checkout->sessions->retrieve($sessionId, []);
+            Log::info($metadata);
+
+            return Inertia::render('Profile/Edit', [
+                'mustVerifyEmail' => $request->user() instanceof MustVerifyEmail,
+                'status' => session('status'),
+                'stripeSessionData' => $metadata,
+                'subscription' => $subscription, // Adicione a assinatura aqui
+            ]);
+        }
+
         return Inertia::render('Profile/Edit', [
             'mustVerifyEmail' => $request->user() instanceof MustVerifyEmail,
             'status' => session('status'),
+            'subscription' => $subscription, // Adicione a assinatura aqui
         ]);
     }
+
 
     /**
      * Update the user's profile information.
