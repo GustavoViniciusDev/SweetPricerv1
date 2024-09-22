@@ -203,7 +203,7 @@
                                                 onChange={(e) => handleChangeIngredient(index, "quantity", e.target.value)}
                                                 className="bg-custom-50 border-custom-300"
                                             />
-                                            <Label className="text-1xl text-custom-800">Custo</Label>
+                                            <Label className="text-1xl text-custom-800">Custo da embalagem fechada</Label>
                                             <div className="relative">
                                                 <span className="absolute left-3 top-1/2 transform -translate-y-1/2">R$</span>
                                                 <Input
@@ -213,7 +213,7 @@
                                                     className="pl-10 bg-custom-50 border-custom-300"
                                                 />
                                             </div>
-                                            <Label className="text-1xl text-custom-800">Quantidade utilizada (g)</Label>
+                                            <Label className="text-1xl text-custom-800">Quantidade utilizada em (g) ou unidade</Label>
                                             <Input
                                                 type="number"
                                                 value={ingredient.quantity_used}

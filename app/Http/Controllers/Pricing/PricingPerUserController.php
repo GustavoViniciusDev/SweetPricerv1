@@ -43,12 +43,14 @@ class PricingPerUserController extends Controller
     public function edit($id)
     {
         $pricing = PricingPerUser::with('ingredients')->findOrFail($id);
+        $pricing_details = PricingDetail::where('pricing_id', $id)->first();
 
         return Inertia::render('Pricing/RegisterIngredients', [
             'pricing' => $pricing,
             'ingredients' => $pricing->ingredients,
             'pricing_id' => $pricing->id,
-            'user_id' => $pricing->user_id
+            'user_id' => $pricing->user_id,
+            'pricing_details' => $pricing_details
         ]);
     }
 }
