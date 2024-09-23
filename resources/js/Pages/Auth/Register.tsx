@@ -5,6 +5,7 @@ import InputLabel from '@/Components/InputLabel';
 import { Button } from '@/Components/ui/button';
 import TextInput from '@/Components/TextInput';
 import { Head, Link, useForm } from '@inertiajs/react';
+import { EyeIcon, EyeSlashIcon } from '@heroicons/react/24/outline';
 
 export default function Register() {
     const { data, setData, post, processing, errors, reset } = useForm({
@@ -14,9 +15,19 @@ export default function Register() {
         password_confirmation: '',
     });
 
+    const [showPassword, setShowPassword] = useState(false);
+    const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+
+    const togglePasswordVisibility = () => {
+        setShowPassword(!showPassword);
+    };
+
+    const toggleConfirmPasswordVisibility = () => {
+        setShowConfirmPassword(!showConfirmPassword);
+    };
+
     const submit: FormEventHandler = (e) => {
         e.preventDefault();
-
         post(route('register'), {
             onFinish: () => reset('password', 'password_confirmation'),
         });
@@ -75,36 +86,56 @@ export default function Register() {
                     <InputError message={errors.email} className="mt-2" />
                 </div>
 
-                <div className="mt-4">
+                <div className="mt-4 relative">
                     <InputLabel htmlFor="password" value="Senha" />
 
-                    <TextInput
-                        id="password"
-                        type="password"
-                        name="password"
-                        value={data.password}
-                        className="mt-1 block w-full rounded-xl border border-custom-300 dark:border-dark-custom-300 bg-custom-50 dark:bg-dark-custom-50 focus:border-custom-500 dark:focus:border-dark-custom-500 focus:ring-0 py-2 px-3"
-                        autoComplete="new-password"
-                        onChange={(e) => setData('password', e.target.value)}
-                        required
-                    />
+                    <div className="relative">
+                        <TextInput
+                            id="password"
+                            type={showPassword ? 'text' : 'password'}
+                            name="password"
+                            value={data.password}
+                            className="mt-1 block w-full rounded-xl border border-custom-300 dark:border-dark-custom-300 bg-custom-50 dark:bg-dark-custom-50 focus:border-custom-500 dark:focus:border-dark-custom-500 focus:ring-0 py-2 px-3"
+                            autoComplete="new-password"
+                            onChange={(e) => setData('password', e.target.value)}
+                            required
+                        />
+
+                        <span onClick={togglePasswordVisibility} className="absolute inset-y-0 right-3 flex items-center cursor-pointer">
+                            {showPassword ? (
+                                <EyeSlashIcon className="h-5 w-5 text-gray-500" />
+                            ) : (
+                                <EyeIcon className="h-5 w-5 text-gray-500" />
+                            )}
+                        </span>
+                    </div>
 
                     <InputError message={errors.password} className="mt-2" />
                 </div>
 
-                <div className="mt-4">
+                <div className="mt-4 relative">
                     <InputLabel htmlFor="password_confirmation" value="Confirmar Senha" />
 
-                    <TextInput
-                        id="password_confirmation"
-                        type="password"
-                        name="password_confirmation"
-                        value={data.password_confirmation}
-                        className="mt-1 block w-full rounded-xl border border-custom-300 dark:border-dark-custom-300 bg-custom-50 dark:bg-dark-custom-50 focus:border-custom-500 dark:focus:border-dark-custom-500 focus:ring-0 py-2 px-3"
-                        autoComplete="new-password"
-                        onChange={(e) => setData('password_confirmation', e.target.value)}
-                        required
-                    />
+                    <div className="relative">
+                        <TextInput
+                            id="password_confirmation"
+                            type={showConfirmPassword ? 'text' : 'password'}
+                            name="password_confirmation"
+                            value={data.password_confirmation}
+                            className="mt-1 block w-full rounded-xl border border-custom-300 dark:border-dark-custom-300 bg-custom-50 dark:bg-dark-custom-50 focus:border-custom-500 dark:focus:border-dark-custom-500 focus:ring-0 py-2 px-3"
+                            autoComplete="new-password"
+                            onChange={(e) => setData('password_confirmation', e.target.value)}
+                            required
+                        />
+
+                        <span onClick={toggleConfirmPasswordVisibility} className="absolute inset-y-0 right-3 flex items-center cursor-pointer">
+                            {showConfirmPassword ? (
+                                <EyeSlashIcon className="h-5 w-5 text-gray-500" />
+                            ) : (
+                                <EyeIcon className="h-5 w-5 text-gray-500" />
+                            )}
+                        </span>
+                    </div>
 
                     <InputError message={errors.password_confirmation} className="mt-2" />
                 </div>
@@ -122,7 +153,6 @@ export default function Register() {
                     </Button>
                 </div>
             </form>
-
         </GuestLayout>
     );
 }
