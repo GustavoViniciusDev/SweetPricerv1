@@ -5,7 +5,6 @@ import { Head } from '@inertiajs/react';
 import { useState } from 'react';
 import axios from 'axios';
 
-
 interface Subscription {
     stripe_status: string;
     stripe_price: string;
@@ -23,7 +22,7 @@ const plans = [
         name: "Plano Básico",
         price: "R$ 29,90",
         description: "Cálculo de precificação e histórico de precificações.",
-        price_id: "price_1Q0VavP6UldebLeNqFSE2Thw",
+        price_id: "price_1Q0qK4P6UldebLeNhvIObYVj",
         available: true,
     },
     {
@@ -51,10 +50,10 @@ export default function PlanSelection({ auth, subscription }: Props) {
     const handleCheckout = async (priceId: string, planName: string) => {
         setLoading(true);
         try {
-            const response = await axios.get('/checkout', {
+            const response = await axios.get(`/checkout`, {
                 params: {
-                    price_id: priceId,
-                    plan_name: planName,
+                    price_id: priceId ?? '',
+                    plan_name: planName ?? 'Plano Desconhecido',
                 }
             });
             const { checkout_url } = response.data;
@@ -113,9 +112,15 @@ export default function PlanSelection({ auth, subscription }: Props) {
                                         <div className="text-4xl font-extrabold text-custom-900 dark:text-dark-custom-100">
                                             {plan.price}
                                         </div>
-                                        {plan.available && (
+                                        {(!subscription || subscription.stripe_price !== plan.price_id) && plan.available && (
                                             <button
-                                                onClick={() => handleCheckout(plan.price_id, plan.name)}
+                                                onClick={() => {
+                                                    if (plan.price_id && plan.name) {
+                                                        handleCheckout(plan.price_id, plan.name);
+                                                    } else {
+                                                        console.error("Price ID ou Plan Name não estão definidos.");
+                                                    }
+                                                }}
                                                 disabled={loading}
                                                 className={`mt-4 inline-block bg-custom-400 dark:bg-dark-custom-500 hover:bg-custom-600 dark:hover:bg-dark-custom-600 text-white font-bold px-4 py-2 rounded-xl transition-colors ${loading ? 'opacity-50 cursor-not-allowed' : ''}`}
                                             >

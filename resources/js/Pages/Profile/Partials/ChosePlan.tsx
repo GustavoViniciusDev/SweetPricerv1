@@ -102,8 +102,6 @@ export default function ChosePlan({ subscription }: Props) {
                 )}
             </div>
 
-
-
             <ConfirmationModal
                 isOpen={modalOpen}
                 onClose={() => setModalOpen(false)}
