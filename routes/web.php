@@ -7,6 +7,7 @@
     use App\Http\Controllers\Pricing\PricingController;
     use App\Http\Controllers\ChoosePlanController;
     use App\Http\Controllers\Stripe\WebhookController;
+    use App\Http\Controllers\Helpme\HelpMeController;
     use Illuminate\Foundation\Application;
     use Illuminate\Support\Facades\Route;
     use Inertia\Inertia;
@@ -101,6 +102,8 @@
         });
 
     });
+
+    Route::post('/help-me', [HelpMeController::class, 'send'])->name('send');
 
 
     require __DIR__ . '/auth.php';

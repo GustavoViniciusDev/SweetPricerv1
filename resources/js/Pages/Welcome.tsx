@@ -5,6 +5,7 @@ import { Accordion, AccordionItem, AccordionTrigger, AccordionContent } from "@/
 import { JSX, SVGProps, useRef, useEffect, useState } from "react";
 import { motion, useInView } from "framer-motion";
 import ClientSlider from './SliderClients';
+import HelpMeIcon from '@/Components/HelpMe/PopUpHelpMe';
 
 export default function Welcome({ auth }: PageProps<{ laravelVersion: string, phpVersion: string }>) {
     const text = "Valorizando cada doce com precisão".split(" ");
@@ -237,6 +238,7 @@ export default function Welcome({ auth }: PageProps<{ laravelVersion: string, ph
                             </div>
                         </motion.section>
                     ))}
+                    <HelpMeIcon />
                 </main>
                 <Footer />
             </div>

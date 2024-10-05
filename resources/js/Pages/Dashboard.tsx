@@ -3,6 +3,9 @@ import { Head, usePage } from '@inertiajs/react';
 import { PageProps } from '@/types';
 import NewPricing from "./Pricing/NewPricing";
 import ListPricings from "./Pricing/ListPricings";
+import HelpMeIcon from '@/Components/HelpMe/PopUpHelpMe';
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 interface DashboardProps extends PageProps {
     list_pricings: {
@@ -25,6 +28,8 @@ export default function Dashboard({ auth, list_pricings }: DashboardProps) {
         >
             <Head title="Dashboard" />
 
+            <ToastContainer />
+
             <div className="p-6">
                 <NewPricing />
             </div>
@@ -32,6 +37,8 @@ export default function Dashboard({ auth, list_pricings }: DashboardProps) {
             <div className="mt-5">
                 <ListPricings list_pricings={list_pricings} />
             </div>
+
+            <HelpMeIcon />
         </AuthenticatedLayout>
     );
 }
