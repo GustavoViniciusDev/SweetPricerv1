@@ -45,6 +45,28 @@ export default function Register() {
         return () => window.removeEventListener('scroll', handleScroll);
     }, []);
 
+    const [isPasswordFocused, setIsPasswordFocused] = useState(false);
+    const [passwordValidations, setPasswordValidations] = useState({
+        length: false,
+        hasNumber: false,
+        hasLetter: false,
+        hasSpecialChar: false,
+    });
+
+    const validatePassword = (password: string) => {
+        const length = password.length >= 8;
+        const hasNumber = /\d/.test(password);
+        const hasLetter = /[a-zA-Z]/.test(password);
+        const hasSpecialChar = /[!@#$%^&*(),.?".{}|<>]/.test(password);
+
+        setPasswordValidations({
+            length,
+            hasNumber,
+            hasLetter,
+            hasSpecialChar,
+        });
+    };
+
     return (
         <GuestLayout>
             <Head title="Criar Conta" />
@@ -97,7 +119,12 @@ export default function Register() {
                             value={data.password}
                             className="mt-1 block w-full rounded-xl border border-custom-300 dark:border-dark-custom-300 bg-custom-50 dark:bg-dark-custom-50 focus:border-custom-500 dark:focus:border-dark-custom-500 focus:ring-0 py-2 px-3"
                             autoComplete="new-password"
-                            onChange={(e) => setData('password', e.target.value)}
+                            onFocus={() => setIsPasswordFocused(true)}
+                            onBlur={() => setIsPasswordFocused(false)}
+                            onChange={(e) => {
+                                setData('password', e.target.value);
+                                validatePassword(e.target.value);
+                            }}
                             required
                         />
 
@@ -110,35 +137,54 @@ export default function Register() {
                         </span>
                     </div>
 
+                    <div className="mt-2 space-y-1 text-sm">
+                        {isPasswordFocused && (
+                            <div className="mt-2 space-y-1 text-sm">
+                                <p className={passwordValidations.length ? 'text-green-500' : 'text-red-500'}>
+                                    Mínimo de 8 caracteres
+                                </p>
+                                <p className={passwordValidations.hasNumber ? 'text-green-500' : 'text-red-500'}>
+                                    Deve conter pelo menos 1 número
+                                </p>
+                                <p className={passwordValidations.hasLetter ? 'text-green-500' : 'text-red-500'}>
+                                    Deve conter pelo menos 1 letra
+                                </p>
+                                <p className={passwordValidations.hasSpecialChar ? 'text-green-500' : 'text-red-500'}>
+                                    Deve conter pelo menos 1 caractere especial
+                                </p>
+                            </div>
+                        )}
+                    </div>
+
                     <InputError message={errors.password} className="mt-2" />
                 </div>
 
                 <div className="mt-4 relative">
-                    <InputLabel htmlFor="password_confirmation" value="Confirmar Senha" />
+                    <InputLabel htmlFor="password" value="Confirmar Senha" />
+                    <TextInput
+                        id="password_confirmation"
+                        type={showConfirmPassword ? 'text' : 'password'}
+                        name="password_confirmation"
+                        value={data.password_confirmation}
+                        className="mt-1 block w-full rounded-xl border border-custom-300 dark:border-dark-custom-300 bg-custom-50 dark:bg-dark-custom-50 focus:border-custom-500 dark:focus:border-dark-custom-500 focus:ring-0 py-2 px-3"
+                        autoComplete="new-password"
+                        onChange={(e) => setData('password_confirmation', e.target.value)}
+                        required
+                    />
 
-                    <div className="relative">
-                        <TextInput
-                            id="password_confirmation"
-                            type={showConfirmPassword ? 'text' : 'password'}
-                            name="password_confirmation"
-                            value={data.password_confirmation}
-                            className="mt-1 block w-full rounded-xl border border-custom-300 dark:border-dark-custom-300 bg-custom-50 dark:bg-dark-custom-50 focus:border-custom-500 dark:focus:border-dark-custom-500 focus:ring-0 py-2 px-3"
-                            autoComplete="new-password"
-                            onChange={(e) => setData('password_confirmation', e.target.value)}
-                            required
-                        />
+                    <span onClick={toggleConfirmPasswordVisibility} className="absolute inset-y-0 right-3 flex items-center cursor-pointer">
+                        {showConfirmPassword ? (
+                            <EyeSlashIcon className="h-5 w-5 text-gray-500" />
+                        ) : (
+                            <EyeIcon className="h-5 w-5 text-gray-500" />
+                        )}
+                    </span>
 
-                        <span onClick={toggleConfirmPasswordVisibility} className="absolute inset-y-0 right-3 flex items-center cursor-pointer">
-                            {showConfirmPassword ? (
-                                <EyeSlashIcon className="h-5 w-5 text-gray-500" />
-                            ) : (
-                                <EyeIcon className="h-5 w-5 text-gray-500" />
-                            )}
-                        </span>
-                    </div>
-
-                    <InputError message={errors.password_confirmation} className="mt-2" />
+                    {data.password_confirmation && data.password_confirmation !== data.password && (
+                        <span className="text-red-500 text-sm mt-2">As senhas não são iguais</span>
+                    )}
                 </div>
+
 
                 <div className="flex items-center justify-end mt-4">
                     <Link
