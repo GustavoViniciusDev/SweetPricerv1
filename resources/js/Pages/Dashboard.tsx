@@ -6,6 +6,7 @@ import ListPricings from "./Pricing/ListPricings";
 import HelpMeIcon from '@/Components/HelpMe/PopUpHelpMe';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import WhatsappIcon from '@/Components/whatsappIcon/PopUpWhatsapp';
 
 interface DashboardProps extends PageProps {
     list_pricings: {
@@ -37,7 +38,7 @@ export default function Dashboard({ auth, list_pricings }: DashboardProps) {
             <div className="mt-5">
                 <ListPricings list_pricings={list_pricings} />
             </div>
-
+            <WhatsappIcon />
             <HelpMeIcon />
         </AuthenticatedLayout>
     );

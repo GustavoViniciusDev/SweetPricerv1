@@ -21,9 +21,8 @@ const HelpMeIcon = () => {
     });
 
     const submit: FormEventHandler = async (e) => {
-        e.preventDefault(); // Chama preventDefault aqui
+        e.preventDefault();
 
-        // Validação simples (você já está usando o Laravel para validação no backend)
         if (data.name === '' || data.email === '' || data.message === '') {
             toast.error('Por favor, preencha todos os campos.');
             return;
@@ -44,7 +43,7 @@ const HelpMeIcon = () => {
     return (
         <div>
             <div
-                className="fixed bottom-5 right-5 bg-custom-600 text-white rounded-full w-16 h-16 flex items-center justify-center text-3xl cursor-pointer shadow-lg hover:bg-custom-700 transition"
+                className="fixed bottom-2 right-5 bg-custom-600 text-white rounded-full w-16 h-16 flex items-center justify-center text-3xl cursor-pointer shadow-lg hover:bg-custom-700 transition"
                 onClick={toggleModal}
             >
                 <TbProgressHelp />
@@ -63,7 +62,7 @@ const HelpMeIcon = () => {
                             <div>
                                 <InputLabel htmlFor="name" value="Nome de Usuário" />
                                 <TextInput
-                                    id="name"
+                                    id="username"
                                     name="name"
                                     value={data.name}
                                     className="mt-1 block w-full rounded-xl border border-custom-300 dark:border-dark-custom-300 bg-custom-50 dark:bg-dark-custom-50 focus:border-custom-500 dark:focus:border-dark-custom-500 focus:ring-0 py-2 px-3"
