@@ -20,7 +20,7 @@ export default function VerifyEmail({ status }: { status?: string }) {
                     <h1 className="text-2xl font-bold mb-4 text-center text-custom-700 dark:text-dark-custom-300">Verificação de Email</h1>
 
                     <div className="mb-6 text-sm text-custom-600 dark:text-dark-custom-200">
-                        Ficamos felizes que tenha criado sua conta conosco! Antes de começar, poderia verificar seu endereço de email clicando no link que acabamos de enviar para você? Se você não recebeu o email, nós enviaremos outro com prazer.
+                    Estamos felizes que você tenha criado sua conta conosco! Antes de começar, por favor, verifique seu endereço de e-mail clicando no link que acabamos de enviar. Se você não recebeu o e-mail, verifique sua caixa de spam ou lixo eletrônico. Se ainda assim não encontrar, nós ficaremos felizes em enviar outro para você.
                     </div>
 
                     {status === 'verification-link-sent' && (
@@ -33,7 +33,7 @@ export default function VerifyEmail({ status }: { status?: string }) {
                         <div className="mt-4 flex flex-col items-center">
                             <Button
                                 type="submit"
-                                className="w-full rounded-lg bg-blue-500 hover:bg-blue-600 text-white font-bold py-3 px-6 border border-blue-600"
+                                className="w-full rounded-lg bg-blue-500 hover:bg-custom-600 text-white font-bold py-3 px-6 border border-custom-600"
                                 disabled={processing}
                             >
                                 Reenviar Email de Verificação

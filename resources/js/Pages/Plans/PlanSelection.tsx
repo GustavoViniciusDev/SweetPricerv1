@@ -70,7 +70,6 @@ export default function PlanSelection({ auth, subscription }: Props) {
         <>
             <AuthenticatedLayout
                 user={auth.user}
-                header={<h2 className="font-semibold text-xl text-custom-600 dark:text-dark-custom-300 leading-tight">Escolha seu Plano</h2>}
             >
                 <Head title="Escolha de Planos" />
                 <div className="mx-auto max-w-5xl py-16">

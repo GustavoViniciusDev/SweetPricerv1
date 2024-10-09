@@ -43,7 +43,8 @@ const HelpMeIcon = () => {
     return (
         <div>
             <div
-                className="fixed bottom-2 right-5 bg-custom-600 text-white rounded-full w-16 h-16 flex items-center justify-center text-3xl cursor-pointer shadow-lg hover:bg-custom-700 transition"
+                className="fixed bottom-2 right-5 bg-custom-600 text-white rounded-full w-10 h-10 flex items-center justify-center text-2xl cursor-pointer shadow-lg hover:bg-custom-700 transition md:w-16 md:h-16 md:text-3xl"
+
                 onClick={toggleModal}
             >
                 <TbProgressHelp />

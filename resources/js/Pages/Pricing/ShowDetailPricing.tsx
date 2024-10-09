@@ -39,7 +39,6 @@ export default function ShowDetailsPricing({ auth, pricingDetails, list_pricings
             <Head title="Detalhes Precificação" />
             <AuthenticatedLayout
                 user={auth.user}
-                header={<h2 className="font-semibold text-xl text-custom-600 dark:text-dark-custom-300 leading-tight">Precificação</h2>}
             >
             </AuthenticatedLayout>
             <div className="bg-custom-50 dark:bg-dark-custom-50 rounded-lg border border-custom-300 dark:border-dark-custom-300 p-8 w-full max-w-4xl mx-auto mt-6">

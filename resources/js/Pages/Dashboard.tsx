@@ -25,7 +25,6 @@ export default function Dashboard({ auth, list_pricings }: DashboardProps) {
     return (
         <AuthenticatedLayout
             user={auth.user}
-            header={<h2 className="font-semibold text-xl text-custom-600 dark:text-dark-custom-300 leading-tight">Precificação</h2>}
         >
             <Head title="Dashboard" />
 

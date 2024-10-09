@@ -27,7 +27,6 @@
         return (
             <AuthenticatedLayout
                 user={auth.user}
-                header={<h2 className="font-semibold text-xl text-custom-700 leading-tight">Perfil</h2>}
             >
                 <Head title="Profile" />
 

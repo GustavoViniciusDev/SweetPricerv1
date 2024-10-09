@@ -10,7 +10,7 @@ const WhatsappIcon = () => {
     return (
         <div>
             <div
-                className="fixed bottom-20 right-5 bg-green-600 text-white rounded-full w-16 h-16 flex items-center justify-center text-3xl cursor-pointer shadow-lg hover:bg-green-700 transition"
+                className="fixed bottom-20 right-5 bg-green-600 text-white rounded-full w-10 h-10 flex items-center justify-center text-2xl cursor-pointer shadow-lg hover:bg-green-700 transition md:w-16 md:h-16 md:text-3xl"
                 onClick={handleWhatsappClick}
             >
                 <FaWhatsapp />
