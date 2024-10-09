@@ -24,7 +24,6 @@
 
 
     export default function Edit({ auth, mustVerifyEmail, status, subscription }: PageProps) {
-        console.log(subscription);
         return (
             <AuthenticatedLayout
                 user={auth.user}
