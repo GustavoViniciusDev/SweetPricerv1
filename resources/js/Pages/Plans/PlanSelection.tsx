@@ -4,6 +4,8 @@ import { Card, CardHeader, CardTitle, CardDescription, CardContent } from "@/Com
 import { Head } from '@inertiajs/react';
 import { useState } from 'react';
 import axios from 'axios';
+import WhatsappIcon from '@/Components/whatsappIcon/PopUpWhatsapp';
+import HelpMeIcon from '@/Components/HelpMe/PopUpHelpMe';
 
 interface Subscription {
     stripe_status: string;
@@ -133,6 +135,8 @@ export default function PlanSelection({ auth, subscription }: Props) {
                         ))}
                     </div>
                 </div>
+                <WhatsappIcon />
+                <HelpMeIcon />
             </AuthenticatedLayout>
         </>
     );
