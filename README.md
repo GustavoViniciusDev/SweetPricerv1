@@ -1,66 +1,101 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# 🍰 SweetPricer
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+**SweetPricer** é um sistema de precificação voltado para confeitarias e vendedores individuais. Ele permite calcular preços de forma precisa e registrar históricos, oferecendo funcionalidades que ajudam a gerenciar custos e aumentar a lucratividade.
 
-## About Laravel
+<div align="center">
+  <img src="https://link-to-logo.com/logo.png" alt="SweetPricer logo" width="300" />
+</div>
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+## 🚀 Funcionalidades
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+- 📊 **Precificação**: Calcule o custo de produção e defina preços baseados nos ingredientes e tempo de preparo.
+- 📝 **Histórico de Preços**: Acompanhe o histórico de precificações e veja as mudanças de preço ao longo do tempo.
+- 📱 **Responsivo**: Use o SweetPricer em computadores, tablets e smartphones.
+- 💸 **Gerenciamento de Planos**: Integração com sistemas de pagamento, oferecendo diferentes planos de assinatura.
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+## 🛠 Tecnologias Utilizadas
 
-## Learning Laravel
+- **Frontend**: React com Inertia.js
+- **Backend**: Laravel 11
+- **Banco de Dados**: MySQL
+- **Serviços de Pagamento**: Stripe para cobrança de planos
+- **Ambiente de Deploy**: CloudPanel, Hostinger VPS
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+## 🎯 Objetivo
 
-You may also try the [Laravel Bootcamp](https://bootcamp.laravel.com), where you will be guided through building a modern Laravel application from scratch.
+O **SweetPricer** foi desenvolvido para ajudar confeiteiros e vendedores autônomos a otimizar seus preços de venda com base em custos reais. O sistema oferece uma interface intuitiva para calcular e gerenciar custos de produção de maneira precisa, sem complicações.
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+## 🖥️ Deploy
 
-## Laravel Sponsors
+O sistema está em produção e pode ser acessado [aqui](https://sweetpricer.app).
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the [Laravel Partners program](https://partners.laravel.com).
+## 🛡️ Configuração
 
-### Premium Partners
+### Pré-requisitos
 
-- **[Vehikl](https://vehikl.com/)**
-- **[Tighten Co.](https://tighten.co)**
-- **[WebReinvent](https://webreinvent.com/)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel/)**
-- **[Cyber-Duck](https://cyber-duck.co.uk)**
-- **[DevSquad](https://devsquad.com/hire-laravel-developers)**
-- **[Jump24](https://jump24.co.uk)**
-- **[Redberry](https://redberry.international/laravel/)**
-- **[Active Logic](https://activelogic.com)**
-- **[byte5](https://byte5.de)**
-- **[OP.GG](https://op.gg)**
+- PHP >= 8.2
+- Node.js >= 18.x
+- Composer
+- MySQL
+- Stripe Account
 
-## Contributing
+### Passo a Passo
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+1. Clone o repositório:
 
-## Code of Conduct
+   ```bash
+   git clone https://github.com/seuusuario/sweetpricer.git
+   cd sweetpricer
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+2. Instale as dependências:
 
-## Security Vulnerabilities
+       composer install
+       npm install
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+3. Crie o arquivo .env:
 
-## License
+       cp .env.example .env
+   
+4. Configure as variáveis de ambiente no .env, incluindo o Stripe e MySQL:
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+        STRIPE_KEY=your_stripe_key
+        STRIPE_SECRET=your_stripe_secret
+
+5. Gere a chave da aplicação:
+
+        php artisan key:generate
+
+6. Execute as migrações e seeds:
+
+       php artisan migrate --seed
+
+7. Compile o frontend:
+
+       npm run build
+
+8. Inicie o servidor de desenvolvimento:
+
+        php artisan serve
+
+   
+Agora o sistema estará rodando localmente em http://localhost:8000.
+
+🛒 Planos de Assinatura
+O SweetPricer oferece diferentes planos de assinatura para atender às necessidades de cada cliente. O gerenciamento de planos é feito através da integração com o Stripe, onde os usuários podem escolher o plano e fazer o pagamento de forma segura.
+
+📷 Demonstração
+
+![image](https://github.com/user-attachments/assets/f5b405e1-56df-41b8-9124-d2d9021ab4c4)
+
+
+🤝 Contribuindo
+Se quiser contribuir com o projeto:
+
+1. Faça um fork do projeto.
+2. Crie uma branch para sua feature (git checkout -b feature/nova-feature).
+3. Faça o commit das suas alterações (git commit -m 'Adiciona nova feature').
+4. Envie a sua branch (git push origin feature/nova-feature).
+5. Abra um Pull Request.
+
+🧑‍💻 Autor
+Desenvolvido com ❤️ por Gustavo Linhares.
