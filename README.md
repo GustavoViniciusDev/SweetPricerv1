@@ -2,9 +2,6 @@
 
 **SweetPricer** é um sistema de precificação voltado para confeitarias e vendedores individuais. Ele permite calcular preços de forma precisa e registrar históricos, oferecendo funcionalidades que ajudam a gerenciar custos e aumentar a lucratividade.
 
-<div align="center">
-  <img src="https://link-to-logo.com/logo.png" alt="SweetPricer logo" width="300" />
-</div>
 
 ## 🚀 Funcionalidades
 
