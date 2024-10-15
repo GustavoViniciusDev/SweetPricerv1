@@ -4,7 +4,7 @@ import InputError from '@/Components/InputError';
 import InputLabel from '@/Components/InputLabel';
 import { Button } from '@/Components/ui/button';
 import { Head, Link, useForm } from '@inertiajs/react';
-import { EyeIcon, EyeSlashIcon } from '@heroicons/react/24/outline';
+import { EyeIcon, EyeSlashIcon, ArrowLeftIcon } from '@heroicons/react/24/outline';
 
 export default function Login({ status, canResetPassword }: { status?: string, canResetPassword: boolean }) {
     const { data, setData, post, processing, errors, reset } = useForm({
@@ -22,7 +22,7 @@ export default function Login({ status, canResetPassword }: { status?: string, c
     };
 
     const [scrolled, setScrolled] = useState(false);
-    const [showPassword, setShowPassword] = useState(false); // Estado para controlar visibilidade da senha
+    const [showPassword, setShowPassword] = useState(false);
 
     useEffect(() => {
         const handleScroll = () => {
@@ -38,6 +38,16 @@ export default function Login({ status, canResetPassword }: { status?: string, c
         <>
             <GuestLayout>
                 <Head title="Entrar" />
+
+                <div className="flex items-center mb-4">
+                    <Link
+                        href="/"
+                        className="text-custom-500 dark:text-dark-custom-200 hover:text-custom-600 dark:hover:text-dark-custom-300 flex items-center space-x-2"
+                    >
+                        <ArrowLeftIcon className="h-5 w-5" />
+                        <span>Voltar para Home</span>
+                    </Link>
+                </div>
 
                 {status && <div className="mb-4 font-medium text-sm text-green-600">{status}</div>}
 

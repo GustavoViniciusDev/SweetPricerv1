@@ -6,6 +6,7 @@ import { Button } from '../ui/button';
 import InputLabel from '../InputLabel';
 import TextInput from '../TextInput';
 import { toast } from 'react-toastify';
+import { XMarkIcon } from '@heroicons/react/24/outline'
 
 const HelpMeIcon = () => {
     const [isModalOpen, setIsModalOpen] = useState(false);
@@ -106,10 +107,10 @@ const HelpMeIcon = () => {
                             </div>
                         </form>
                         <Button
-                            className="absolute top-3 right-3 text-custom-600 hover:text-custom-500 transition"
+                            className="absolute top-3 right-3 text-custom-600 hover:text-custom-500 transition p-1"
                             onClick={toggleModal}
                         >
-                            Fechar
+                            <XMarkIcon className="h-5 w-5" />
                         </Button>
                     </div>
                 </div>

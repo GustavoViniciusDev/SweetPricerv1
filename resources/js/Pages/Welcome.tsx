@@ -74,8 +74,9 @@ export default function Welcome({ auth }: PageProps<{ laravelVersion: string, ph
                         >
                             <div className="max-w-5xl mx-auto">
                                 {index === 0 && (
-                                    <div className="mt-10 grid gap-4 px-10 md:grid-cols-2 md:gap-16 items-center justify-center">
-                                        <h1 className="lg:leading-tighter text-custom-700 dark:text-dark-custom-200 text-5xl font-bold tracking-tighter sm:text-4xl md:text-5xl xl:text-[3.4rem] 2xl:text-[3.75rem]">
+                                    <div className="mt-10 grid gap-4 px-10 md:grid-cols-2 md:gap-16 items-center">
+                                    <div className="flex flex-col space-y-4">
+                                        <h1 className="lg:leading-tighter text-custom-700 dark:text-dark-custom-200 text-5xl font-bold tracking-tighter sm:text-4xl md:text-5xl xl:text-[3.4rem] 2xl:text-[3.75rem] mb-10">
                                             {text.map((el, i) => (
                                                 <motion.span
                                                     initial={{ opacity: 0 }}
@@ -90,21 +91,31 @@ export default function Welcome({ auth }: PageProps<{ laravelVersion: string, ph
                                                 </motion.span>
                                             ))}
                                         </h1>
-                                        <motion.div
-                                            className="flex flex-col items-center space-y-4"
-                                            initial={{ opacity: 0, x: 50 }}
-                                            animate={{ opacity: 1, x: 0 }}
-                                            transition={{ duration: 0.8 }}
+                                        <motion.a
+                                            href={route('register')}
+                                            className="bg-custom-400 dark:bg-dark-custom-400 hover:bg-custom-500 dark:hover:bg-dark-custom-500 text-white font-bold py-2 px-4 border border-custom-500 dark:border-dark-custom-500 rounded  flex items-center justify-center"
+                                            initial={{ opacity: 0, y: 20 }}
+                                            animate={{ opacity: 1, y: 0 }}
+                                            transition={{ duration: 0.6 }}
                                         >
-                                            <img
-                                                src="/images/cake-shop-amico.svg"
-                                                width="550"
-                                                height="300"
-                                                alt="cake-shop"
-                                                className="mx-auto object-cover"
-                                            />
-                                        </motion.div>
+                                            Teste grátis por 7 dias
+                                        </motion.a>
                                     </div>
+                                    <motion.div
+                                        className="flex flex-col items-center space-y-4"
+                                        initial={{ opacity: 0, x: 50 }}
+                                        animate={{ opacity: 1, x: 0 }}
+                                        transition={{ duration: 0.8 }}
+                                    >
+                                        <img
+                                            src="/images/cake-shop-amico.svg"
+                                            width="550"
+                                            height="300"
+                                            alt="cake-shop"
+                                            className="mx-auto object-cover"
+                                        />
+                                    </motion.div>
+                                </div>
                                 )}
                                 {index === 1 && (
                                     <div className="container px-4 md:px-6">
