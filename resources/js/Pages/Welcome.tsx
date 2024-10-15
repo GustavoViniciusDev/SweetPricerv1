@@ -91,7 +91,7 @@ export default function Welcome({ auth }: PageProps<{ laravelVersion: string, ph
                                                 </motion.span>
                                             ))}
                                         </h1>
-                                        <motion.a
+                                        {/* <motion.a
                                             href={route('register')}
                                             className="bg-custom-400 dark:bg-dark-custom-400 hover:bg-custom-500 dark:hover:bg-dark-custom-500 text-white font-bold py-2 px-4 border border-custom-500 dark:border-dark-custom-500 rounded  flex items-center justify-center"
                                             initial={{ opacity: 0, y: 20 }}
@@ -99,7 +99,7 @@ export default function Welcome({ auth }: PageProps<{ laravelVersion: string, ph
                                             transition={{ duration: 0.6 }}
                                         >
                                             Teste grátis por 7 dias
-                                        </motion.a>
+                                        </motion.a> */}
                                     </div>
                                     <motion.div
                                         className="flex flex-col items-center space-y-4"
