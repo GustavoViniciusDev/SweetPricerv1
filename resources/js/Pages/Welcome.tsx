@@ -8,6 +8,7 @@ import ClientSlider from './SliderClients';
 import HelpMeIcon from '@/Components/HelpMe/PopUpHelpMe';
 import WhatsappIcon from '@/Components/whatsappIcon/PopUpWhatsapp';
 import SuperDemo from '@/Components/superDemo/SuperdemoComponent';
+import ComponentEvaluation from '@/Components/customerAssessment/Evaluation';
 
 export default function Welcome({ auth }: PageProps<{ laravelVersion: string, phpVersion: string }>) {
     const text = "Valorizando cada doce com precisão".split(" ");
@@ -110,7 +111,8 @@ export default function Welcome({ auth }: PageProps<{ laravelVersion: string, ph
                                         <div className="mb-20">
                                             <SuperDemo />
                                         </div>
-                                        <ClientSlider />
+                                        <ComponentEvaluation />
+                                        {/* <ClientSlider /> */}
                                     </div>
                                 )}
                                 {index === 2 && (
