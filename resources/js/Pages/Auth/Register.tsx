@@ -161,27 +161,30 @@ export default function Register() {
 
                 <div className="mt-4 relative">
                     <InputLabel htmlFor="password" value="Confirmar Senha" />
-                    <TextInput
-                        id="password_confirmation"
-                        type={showConfirmPassword ? 'text' : 'password'}
-                        name="password_confirmation"
-                        value={data.password_confirmation}
-                        className="mt-1 block w-full rounded-xl border border-custom-300 dark:border-dark-custom-300 bg-custom-50 dark:bg-dark-custom-50 focus:border-custom-500 dark:focus:border-dark-custom-500 focus:ring-0 py-2 px-3"
-                        autoComplete="new-password"
-                        onChange={(e) => setData('password_confirmation', e.target.value)}
-                        required
-                    />
-
-                    <span onClick={toggleConfirmPasswordVisibility} className="absolute inset-y-0 right-3 flex items-center cursor-pointer">
-                        {showConfirmPassword ? (
-                            <EyeSlashIcon className="h-5 w-5 text-gray-500" />
-                        ) : (
-                            <EyeIcon className="h-5 w-5 text-gray-500" />
-                        )}
-                    </span>
-
+                    <div className="relative">
+                        <TextInput
+                            id="password_confirmation"
+                            type={showConfirmPassword ? 'text' : 'password'}
+                            name="password_confirmation"
+                            value={data.password_confirmation}
+                            className="mt-1 block w-full rounded-xl border border-custom-300 dark:border-dark-custom-300 bg-custom-50 dark:bg-dark-custom-50 focus:border-custom-500 dark:focus:border-dark-custom-500 focus:ring-0 py-2 px-3 pr-10"
+                            autoComplete="new-password"
+                            onChange={(e) => setData('password_confirmation', e.target.value)}
+                            required
+                        />
+                        <span
+                            onClick={toggleConfirmPasswordVisibility}
+                            className="absolute inset-y-0 right-3 flex items-center cursor-pointer"
+                        >
+                            {showConfirmPassword ? (
+                                <EyeSlashIcon className="h-5 w-5 text-gray-500" />
+                            ) : (
+                                <EyeIcon className="h-5 w-5 text-gray-500" />
+                            )}
+                        </span>
+                    </div>
                     {data.password_confirmation && data.password_confirmation !== data.password && (
-                        <span className="text-red-500 text-sm mt-2">As senhas não são iguais</span>
+                        <span className="text-red-500 text-sm mt-2 block">As senhas não são iguais</span>
                     )}
                 </div>
 

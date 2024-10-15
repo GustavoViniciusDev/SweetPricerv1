@@ -7,6 +7,7 @@ import { motion, useInView } from "framer-motion";
 import ClientSlider from './SliderClients';
 import HelpMeIcon from '@/Components/HelpMe/PopUpHelpMe';
 import WhatsappIcon from '@/Components/whatsappIcon/PopUpWhatsapp';
+import SuperDemo from '@/Components/superDemo/SuperdemoComponent';
 
 export default function Welcome({ auth }: PageProps<{ laravelVersion: string, phpVersion: string }>) {
     const text = "Valorizando cada doce com precisão".split(" ");
@@ -106,6 +107,9 @@ export default function Welcome({ auth }: PageProps<{ laravelVersion: string, ph
                                 )}
                                 {index === 1 && (
                                     <div className="container px-4 md:px-6">
+                                        <div className="mb-20">
+                                            <SuperDemo />
+                                        </div>
                                         <ClientSlider />
                                     </div>
                                 )}
